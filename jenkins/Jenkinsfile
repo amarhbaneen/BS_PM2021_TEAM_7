@@ -11,11 +11,7 @@ pipeline {
             steps {
                 sh 'python manage.py test'
             }
-            post {
-                always {
-                    junit 'tests/results.xml'
-                }
-            }
+
         }
     }
 }
