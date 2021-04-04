@@ -61,8 +61,8 @@ class StudiesStudent(models.Model):
 
 class AdminMessage(models.Model):
     id = models.IntegerField(primary_key=True)
-    adminId = models.ForeignKey(Admin, on_delete=models.CASCADE)
-    messageContent = models.TextField
+    adminId = models.ForeignKey(Admin, on_delete=models.CASCADE,default=1)
+    messageContent = models.TextField(default="")
 
 
 class TeacherMessage(models.Model):
