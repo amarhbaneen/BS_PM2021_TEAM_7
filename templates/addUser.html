@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %} Add user{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <form method="POST" class="form-group">
+    {% csrf_token %}
+    {{ form |crispy}}
+      <button type="submit" class="btn btn-success">Add new user</button>
+ </form>
+{% endblock %}
