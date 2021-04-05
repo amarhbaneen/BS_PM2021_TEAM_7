@@ -10,3 +10,14 @@ class HomeworkForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(HomeworkForm, self).__init__(*args, **kwargs)
         self.fields['teacherId'].empty_label = "select"
+from .models import AdminMessage, Grade
+
+
+class AdminMessageForm(forms.ModelForm):
+
+    class Meta:
+        model = AdminMessage
+        fields =('messageContent',)
+
+
+
