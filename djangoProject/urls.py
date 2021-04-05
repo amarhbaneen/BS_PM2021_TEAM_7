@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from . import views
 
+from djangoProject import views as addUserView
 
 from django.urls import path,include
 from . import views
@@ -26,6 +27,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('addMessages/', views.addMessage, name='createMess'),
     path('index/', views.index, name='aa'),
+    path('addUser/',addUserView.addUser,name="addUser"),
     path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('teacher/',include('schoolSystemManagment.urls'))
 
