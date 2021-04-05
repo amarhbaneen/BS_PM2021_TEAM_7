@@ -26,5 +26,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('addMessages/', views.addMessage, name='createMess'),
     path('index/', views.index, name='aa'),
+    path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('teacher/',include('schoolSystemManagment.urls'))
 
 ]
