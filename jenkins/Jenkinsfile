@@ -13,16 +13,6 @@ pipeline {
             }
 
         }
-         stage('run app') {
-            agent {
-                docker {
-                    image 'amarhabneen/bm_team7'
-                }
-            }
-            steps {
-                sh 'python manage.py runserver'
-            }
 
-        }
     }
 }
