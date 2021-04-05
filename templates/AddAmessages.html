@@ -2,7 +2,10 @@
 
 
 {% block content %}
-    <form action="" method="post" autocomplete="off">
+
+
+      <p>this message will be showen to all users</p>
+         <form action="" method="post" autocomplete="off">
         {% csrf_token %}
         {{ form }}
 
@@ -12,4 +15,5 @@
 
 
     </form>
+
 {% endblock content %}
