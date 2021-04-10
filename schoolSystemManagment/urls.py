@@ -6,6 +6,8 @@ from . import views
 
 urlpatterns = [
     path('',views.teacher_base),
-    path('homeworkform/',views.homework_form)
+    path('homeworkform/',views.homework_form),
+    path('delete/<int:id>/',views.homework_delete,name='homework_delete'),
+    path('<int:id>/', views.homework_form, name='homework_update'),
 
 ]

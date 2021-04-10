@@ -31,7 +31,11 @@ class HomeWork(models.Model):
     teacherId = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     # every Homework have the id of the teacher who submit it
     # so we can send it to the student page who have the same teacher id
-    homeWorkContent = models.TextField(default="")  # the content that include the questions of the homework
+    homeWorkContent = models.TextField(default="")
+
+    def __str__(self):
+        return self.homeWorkContent
+    # the content that include the questions of the homework
 
 
 class StudentSolution(models.Model):

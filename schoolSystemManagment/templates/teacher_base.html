@@ -17,11 +17,41 @@
             <div class="jumbotron">
                 <h1 class="display-4">Welcome Teacher! </h1>
                 <p class="lead font-italic">choose what you want to do </p>
-                <a  href = "http://127.0.0.1:8000/teacher/homeworkform" class="btn btn-outline-success">
-                    <i class="fas fa-plus"> </i>
-                        Add Teacher</a>
-                <hr class="my-4">
                 {% block content %}
+                  <table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Homework id </td>
+            <td>Content</td>
+
+            <td>
+                <a href="http://127.0.0.1:8000/teacher/homeworkform" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add New Homework
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for homework in homework_list %}
+            <tr>
+                <td>{{homework.id}}</td>
+                <td>{{homework.homeWorkContent}}</td>
+
+                <td>
+                    <a href="{%  url 'homework_update' homework.id %}" class="btn text-secondary px-0">
+                        <i class="far fa-edit fa-lg"></i>
+                    </a>
+                    <form action="{% url 'homework_delete' homework.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
                 {% endblock content %}
             </div>
         </div>
@@ -40,3 +70,4 @@
 </body>
 
 </html>
+
