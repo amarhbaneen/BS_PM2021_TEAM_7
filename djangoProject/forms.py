@@ -11,7 +11,6 @@ class addUserForm(UserCreationForm):
     email=forms.EmailField()
     user_type=forms.CharField(max_length=50,required=True)
     chose_teacher = forms.CharField(max_length=50,required=False)
-    #ch=forms.CharField( widget=forms.Select(choices=teacher_id))
 
 
     class Meta:
