@@ -24,6 +24,8 @@ class Admin(models.Model):
     id = models.IntegerField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
     # Admin model that inherit his auth id from user Table
+    def __str__(self):
+        return  self.userId.username
 
 
 class HomeWork(models.Model):
@@ -70,6 +72,8 @@ class AdminMessage(models.Model):
     id = models.IntegerField(primary_key=True)
     adminId = models.ForeignKey(Admin, on_delete=models.CASCADE,default=1)
     messageContent = models.TextField(default="")
+
+
 
 
 class TeacherMessage(models.Model):

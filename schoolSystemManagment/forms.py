@@ -1,5 +1,5 @@
 from django import forms
-from .models import HomeWork, Teacher
+from .models import HomeWork, Teacher, TeacherMessage
 
 
 class HomeworkForm(forms.ModelForm):
@@ -20,4 +20,14 @@ class AdminMessageForm(forms.ModelForm):
         fields =('messageContent',)
 
 
+
+class TeacherMessageForm(forms.ModelForm):
+
+    class Meta:
+        model = TeacherMessage
+        fields =('teacherId','messageContent',)
+
+    def __init__(self, *args, **kwargs):
+        super(TeacherMessageForm, self).__init__(*args, **kwargs)
+        self.fields['teacherId'].empty_label = "select"
 
