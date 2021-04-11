@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect ,get_object_or_404
 from djangoProject.forms import addUserForm
 from schoolSystemManagment.models import models,Student,Teacher
 
@@ -28,28 +28,14 @@ def addUser(request):
     return render(request,"user_form_info.html",{"form":form})
 
 
-
-def user_form_info(request,id=0):
-
-    if request.method=='GET':
-        if id==0:
-            form = addUserForm()
-        else:
-             user=User.objects.get(pk=id)
-             form=addUserForm(instance=user)
-        return render(request,'user_form_info.html',{'form':form})
-    else:
-        if id==0:
-            form = addUserForm(request.POST)
-        else:
-            user = User.objects.get(pk=id)
-            form = addUserForm(request.POST,instance=user)
-        if form.is_valid():
-            form.save()
+def user_form_edit(request,id=None):
+    instance=get_object_or_404(User,id=id)
+    form=addUserForm(request.POST or None,instance=instance)
+    if form.is_valid():
+        instance=form.save(commit=False)
+        instance.save()
         return redirect('user_list')
-
-
-
+    return render(request,'user_form_info.html',{'form':form})
 
 def user_list(request):
     context=User.objects.all()

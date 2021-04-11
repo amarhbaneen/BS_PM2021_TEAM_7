@@ -23,8 +23,8 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('addUser/',UserView.addUser,name="addUser"),
-    path('update_info/',UserView.user_form_info,name="update_user_info"),
-    path('<int:id>/',UserView.user_form_info,name='user_update'),
+    path('update/',UserView.user_form_edit,name="update_user_info"),
+    path('<int:id>/',UserView.user_form_edit,name='user_update'),
     path('delete/<int:id>',UserView.delete_user,name="delete_user"),
     path('user_list/',UserView.user_list,name="user_list"),
     path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
