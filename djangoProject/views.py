@@ -1,6 +1,10 @@
 from django.shortcuts import render,redirect
 from .forms import *
 from schoolSystemManagment.models import  *
+from django.contrib import messages
+from django.contrib.auth.models import auth, User
+from django.contrib.auth import login, logout, authenticate
+from django.shortcuts import redirect, render
 
 def Teacherbase(request):
     return render(request,"teacher_base.html")
@@ -74,3 +78,22 @@ def homework_delete(request, id):
 def showMessages(request):
     contex = {'message_list': TeacherMessage.objects.all()}
     return render(request, "all_messages.html", contex)
+
+def adminlogin(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return render(request, 'welcome.html')
+        else:
+            messages.info(request, 'error')
+            return redirect('login')
+    else:
+        return render(request, 'login.html')
+
+
+def adminlogout(request):
+    auth.logout(request)
+    return redirect('/login')
