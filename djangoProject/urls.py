@@ -25,7 +25,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('login/', views.adminlogin, name='login'),
+    path('logout/', views.adminlogout, name='logout'),
     path('addMessages/', views.addMessage, name='createMess'),
     path('index/', views.index, name='aa'),
 
@@ -38,9 +39,8 @@ urlpatterns = [
     path('teacher/',include('schoolSystemManagment.urls')),
     path('messages/', views.message_base, name='message'),
     path('showmessages/', views.showMessages, name='all_mess'),
-
     path('messages/',views.message_base,name='messages_form'),
-path('addmess/',views.message_form,name='messages_form'),
+    path('addmess/',views.message_form,name='messages_form'),
     path('delete/<int:id>/',views.homework_delete,name='messages_delete'),
     path('<int:id>/', views.message_form, name='messages_update'),
 

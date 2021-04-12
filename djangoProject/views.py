@@ -7,6 +7,9 @@ from django.shortcuts import render,redirect ,get_object_or_404
 from djangoProject.forms import addUserForm
 from schoolSystemManagment.models import models,Student,Teacher
 
+from django.contrib.auth.models import auth, User
+from django.contrib.auth import login, logout, authenticate
+from django.shortcuts import redirect, render
 
 def Teacherbase(request):
     return render(request,"teacher_base.html")
@@ -116,3 +119,22 @@ def delete_user(request,id):
     user = User.objects.get(pk=id)
     user.delete()
     return redirect('user_list')
+
+def adminlogin(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return render(request, 'welcome.html')
+        else:
+            messages.info(request, 'error')
+            return redirect('login')
+    else:
+        return render(request, 'login.html')
+
+
+def adminlogout(request):
+    auth.logout(request)
+    return redirect('/login')
