@@ -48,7 +48,7 @@ def addUser(request):
             return redirect('user_list')
     else:
         form=addUserForm()
-    return render(response,"addUser.html",{"form":form})
+    return render(request,"user_form_info.html",{"form":form})
 
 
 
