@@ -18,6 +18,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 from djangoProject import views as addUserView
+from djangoProject import views as UserView
 
 from django.urls import path,include
 from . import views
@@ -27,7 +28,12 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('addMessages/', views.addMessage, name='createMess'),
     path('index/', views.index, name='aa'),
-    path('addUser/',addUserView.addUser,name="addUser"),
+
+    path('addUser/',UserView.addUser,name="addUser"),
+    path('update/',UserView.user_form_edit,name="update_user_info"),
+    path('<int:id>/',UserView.user_form_edit,name='user_update'),
+    path('delete/<int:id>',UserView.delete_user,name="delete_user"),
+    path('user_list/',UserView.user_list,name="user_list"),
     path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('teacher/',include('schoolSystemManagment.urls')),
     path('messages/', views.message_base, name='message'),
