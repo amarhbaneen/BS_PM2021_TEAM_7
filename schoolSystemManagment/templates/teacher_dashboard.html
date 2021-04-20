@@ -1,0 +1,77 @@
+{%  extends 'teacher_base.html' %}
+
+{% block content %}
+
+{% include 'teacher_status.html' %}
+
+<br>
+
+<div class="row">
+	<div class="col-md-6">
+		<h5>Studnets</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">Create Students</a>
+			<table class="table table-sm">
+				<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for  i in student_list %}
+                    <tr>
+              <td> {{ i.userId.first_name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<h5>homework</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">Create homework</a>
+			<table class="table table-sm">
+				<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for i in homework_list %}
+                         <tr>
+              <td> {{ i.id }}</td>
+               <td>
+                   <a href="{%  url 'homework_update' i.id %}" class="btn text-secondary px-0">
+                        <i class="far fa-edit fa-lg">edit</i>
+                    </a>
+
+               </td>
+                         <td>
+                             <form action="{% url 'homework_delete' i.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"> remove</i>
+                        </button>
+                    </form>
+                         </td>
+
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import HomeworkForm
-from .models import HomeWork
+from .models import HomeWork,Student
 
 
 def homework_form(request,id=0):
@@ -25,8 +25,10 @@ def homework_form(request,id=0):
 
 
 def teacher_base(request):
-    contex = {'homework_list': HomeWork.objects.all()}
-    return render(request, "teacher_base.html", contex)
+
+    contex = {'homework_list': HomeWork.objects.all(),'student_list':Student.objects.all(),'studentcount':Student.objects.all().count(),
+              'homeworkcount':HomeWork.objects.all().count()}
+    return render(request, "teacher_dashboard.html", contex)
 
 
 def homework_delete(request, id):
