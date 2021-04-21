@@ -32,8 +32,8 @@ urlpatterns = [
 
     path('addUser/',UserView.addUser,name="addUser"),
     path('update/',UserView.user_form_edit,name="update_user_info"),
-    path('<int:id>/',UserView.user_form_edit,name='user_update'),
-    path('delete/<int:id>',UserView.delete_user,name="delete_user"),
+   # path('<int:id>/',UserView.user_form_edit,name='user_update'),
+   # path('delete/<int:id>',UserView.delete_user,name="delete_user"),
     path('user_list/',UserView.user_list,name="user_list"),
     path('', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('',include('schoolSystemManagment.urls')),
@@ -41,8 +41,8 @@ urlpatterns = [
     path('showmessages/', views.showMessages, name='all_mess'),
     path('messages/',views.message_base,name='messages_form'),
     path('addmess/',views.message_form,name='messages_form'),
-    path('delete/<int:id>/',views.homework_delete,name='messages_delete'),
-    path('<int:id>/', views.message_form, name='messages_update'),
+   #path('delete/<int:id>/',views.homework_delete,name='messages_delete'),
+   # path('<int:id>/', views.message_form, name='messages_update'),
 
 
 
