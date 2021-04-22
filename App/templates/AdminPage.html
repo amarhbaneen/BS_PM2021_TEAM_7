@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+{% include 'status.html' %}
+
+<br>
+{% csrf_token %}
+<div class="row">
+	<div class="col-md-6">
+		<h5>Studnets</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">Create Students</a>
+			<table class="table table-sm">
+				<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for  i in students %}
+                    <tr>
+              <td> {{ i.name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<h5>Teachers</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">Create Teacher</a>
+			<table class="table table-sm">
+				<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for i in teachers %}
+                    <tr>
+              <td> {{ i.name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
