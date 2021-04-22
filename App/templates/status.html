@@ -1,0 +1,56 @@
+<br>
+<style>
+    body{
+        background-color: #ecf0f1;
+    }
+    #users{
+        background-color:#4cb4c7;
+    }
+    #teacher{
+        background-color: #7ed6df;
+    }
+    #students{
+        background-color:#80CBC4 ;
+    }
+</style>
+
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center    mb-3" id="users">
+			  	<div class="card-header">
+			  		<h5 class="card-title">Total users</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{ totalusers }}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center   mb-3" id="teacher">
+			  	<div class="card-header">
+			  		<h5 class="card-title">Teachers</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{ countTeacher }}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col">
+		<div class="col-md">
+			<div class="card text-center   mb-3" id="students" >
+			  	<div class="card-header">
+			  		<h5 class="card-title">Students</h5>
+			  	</div>
+			  	<div class="card-body">
+			    	<h3 class="card-title">{{ countStudent }}</h3>
+			  	</div>
+			</div>
+		</div>
+	</div>
+</div>

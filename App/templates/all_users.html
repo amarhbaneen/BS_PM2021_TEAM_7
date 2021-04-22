@@ -1,0 +1,46 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h5>Users</h5>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for  i in students %}
+                    <tr>
+              <td> {{ i.name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+                    {% for  i in teachers %}
+                    <tr>
+              <td> {{ i.name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+
+{% endblock content %}
