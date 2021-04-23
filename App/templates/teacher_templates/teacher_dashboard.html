@@ -1,0 +1,72 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+{% include 'teacher_templates/teacher_status.html' %}
+
+<br>
+
+<div class="row">
+	<div class="col-md-6">
+		<h5>Studnets</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">Create Students</a>
+			<table class="table table-sm">
+				<tr>
+					<th>User name</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for  i in student_list %}
+                    <tr>
+              <td> {{ i.name }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<h5>Homeworks</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="{% url 'homework_form' %}">create a new homework</a>
+			<table class="table table-sm">
+				<tr>
+					<th>Title</th>
+
+
+					<th>Update</th>
+					<th>Remove</th>
+				</tr>
+                {% for i in homework_list %}
+                    <tr>
+              <td> {{ i.homeWorkTitle }}</td>
+                     <td>  <a class="btn btn-outline-success" href="{%  url 'homework_update' i.id %}" role="button">Edit</a></td>
+
+
+                     <td>  <form action="{% url 'homework_delete' i.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="btn btn-outline-success"> remove</i>
+                        </button>
+                        </form>
+                     </td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}
