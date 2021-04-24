@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete_homework/<int:id>/', views.homework_delete, name='homework_delete'),
     path('homeworkform/', views.homework_form, name='homework_form'),
     path('homeowrk<int:id>/', views.homework_form, name='homework_update'),
+    path('bugreportform/', views.bug_report_form, name='bugreportform'),
 ]

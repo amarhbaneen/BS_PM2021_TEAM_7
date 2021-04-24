@@ -23,7 +23,7 @@ def login(request):
             return render(request, 'StudentPage.html')
         elif user is not None and user.groups.filter(name='teachers').exists():
             auth.login(request, user)
-            return render(request, 'teacher_templates/teacher_dashboard.html')
+            return redirect('/teacher',request)
         else:
             messages.info(request, 'error')
             return redirect('login')
@@ -51,21 +51,13 @@ def homework_form(request, id=0):
     if request.method == "GET":
         if id == 0:
             form = HomeworkForm()
-
-
-
-
         else:
             homework = HomeWork.objects.get(pk=id)
-
             form = HomeworkForm(instance=homework)
-
-
         return render(request, "homework_templates/homework_form.html", {'form': form})
     else:
         if id == 0:
             form = HomeworkForm(request.POST)
-
         else:
             homework = HomeWork.objects.get(pk=id)
             form = HomeworkForm(request.POST, instance=homework)
@@ -81,3 +73,9 @@ def homework_delete(request, id):
     homework = HomeWork.objects.get(pk=id)
     homework.delete()
     return redirect('/teacher')
+# -------------------------------------- Bug Reports Views ----------------------------------#
+def bug_report_form(request):
+    # creating new form for inserting or editing existed homework
+
+        return render(request, "bug_reports_templates/bugreport_form.html")
+

@@ -96,3 +96,8 @@ class TeacherMessage(models.Model):
 
     def __str__(self):
         return self.messageTitle + self.teacher.__str__()
+
+
+class Bugreport(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    bugContent = models.TextField()
