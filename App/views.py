@@ -70,6 +70,8 @@ def homework_form(request, id=0):
             homework = HomeWork.objects.get(pk=id)
             form = HomeworkForm(request.POST, instance=homework)
         if form.is_valid():
+            #homework_1 = form.save(commit=False)
+            #homework_1.teacher = Teacher.objects.get(user = request.user)
             form.save()
         return redirect('/teacher')
         # @author Amar Alsana

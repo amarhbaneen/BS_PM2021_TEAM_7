@@ -12,6 +12,7 @@ admin.site.register(TeacherMessage)
 admin.site.register(Grade)
 admin.site.register(Studies)
 admin.site.register(StudiesStudent)
+admin.site.register(Bugreport)
 
 
 
