@@ -90,7 +90,7 @@ class AdminMessage(models.Model):
 
 
 class TeacherMessage(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
     messageTitle = models.TextField(default="")
     messageContent = models.TextField()
 

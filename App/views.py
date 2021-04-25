@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.contrib import messages
 from django.shortcuts import render, redirect
 
-from App.forms import HomeworkForm
+from App.forms import *
 from App.models import *
 
 
@@ -10,6 +10,9 @@ def homepage(request):
     return render(request, 'dashboard.html')
 def home(requset):
     return render(requset,'home.html')
+
+def profile(requset):
+    return render(requset, 'profile.html')
 
 def login(request):
     if request.method == 'POST':
@@ -36,13 +39,58 @@ def login(request):
 # @author Amar Alsana
 def teacher_dashboard(request):
     # created Dashboard for the Teacher that shown for the teacher after loging in
-    context = {'homework_list': HomeWork.objects.all(), 'student_list': Student.objects.all(),
+    context = {'homework_list': HomeWork.objects.all(), 'message_list': TeacherMessage.objects.all(),
                'studentcount': Student.objects.all().count(),
-               'homeworkcount': HomeWork.objects.all().count()}
+               'homeworkcount': HomeWork.objects.all().count(),
+               'adminMessage':AdminMessage.objects.first(),
+               }
     # context = dictionary that content the whole elements that dashboard need to use
     # @author Amar Alsana
 
     return render(request, "teacher_templates/teacher_dashboard.html", context)
+
+
+
+
+
+
+
+
+
+def teacher_message_form(request, id=0):
+    # creating new form for inserting or editing existed teacher messages
+    if request.method == "GET":
+        if id == 0:
+            form = TeacherMessageForm()
+
+
+
+
+        else:
+            message = TeacherMessage.objects.get(pk=id)
+
+            form = TeacherMessageForm(instance=message)
+
+
+        return render(request, "teacher_templates/message_form.html", {'form': form})
+    else:
+        if id == 0:
+            form = TeacherMessageForm(request.POST)
+
+        else:
+            message = TeacherMessage.objects.get(pk=id)
+            form = TeacherMessageForm(request.POST, instance=message)
+        if form.is_valid():
+
+            form.save()
+        return redirect('teacher')
+
+
+def admin_mesaage_delete(request, id):
+
+    message = AdminMessage.objects.get(pk=id)
+    message.delete()
+    return redirect('homepage')
 
 
 # -------------------------------------- homework Views ----------------------------------#
@@ -84,3 +132,50 @@ def homework_delete(request, id):
     homework = HomeWork.objects.get(pk=id)
     homework.delete()
     return redirect('/teacher')
+
+
+
+
+# -------------------------------------- Admin Views ----------------------------------#
+def admin_message_form(request, id=0):
+    # creating new form for inserting or editing existed admin messages
+    if request.method == "GET":
+        if id == 0:
+            form = AdminMessageForm()
+
+
+
+
+        else:
+            message = AdminMessage.objects.get(pk=id)
+
+            form = AdminMessageForm(instance=message)
+
+
+        return render(request, "admin_templates/admin_message_form.html", {'form': form})
+    else:
+        if id == 0:
+            form = AdminMessageForm(request.POST)
+
+        else:
+            message = AdminMessage.objects.get(pk=id)
+            form = AdminMessageForm(request.POST, instance=message)
+        if form.is_valid():
+
+            form.save()
+        return redirect('homepage')
+
+
+def admin_mesaage_delete(request, id):
+
+    message = AdminMessage.objects.get(pk=id)
+    message.delete()
+    return redirect('homepage')
+
+
+
+
+
+
+
+

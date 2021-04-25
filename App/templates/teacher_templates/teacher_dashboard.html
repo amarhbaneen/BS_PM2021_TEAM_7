@@ -7,22 +7,23 @@
 <br>
 
 <div class="row">
-	<div class="col-md-6">
-		<h5>Studnets</h5>
+	<div class="col">
+	<div class="col-md">
+		<h5>My Messages</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-outline-primary  " href="">Create Students</a>
+			<a class="btn btn-outline-primary  " href="">Add Message</a>
 			<table class="table table-sm">
 				<tr>
-					<th>User name</th>
+					<th>Title</th>
 
 
 					<th>Update</th>
 					<th>Remove</th>
 				</tr>
-                {% for  i in student_list %}
+                {% for  i in message_list %}
                     <tr>
-              <td> {{ i.name }}</td>
+              <td> {{ i.messageTitle }}</td>
                      <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
 
 
@@ -33,8 +34,9 @@
 			</table>
 		</div>
 	</div>
-
-	<div class="col-md-6">
+    </div>
+	<div class="col">
+	<div class="col-md">
 		<h5>Homeworks</h5>
 		<hr>
 		<div class="card card-body">
@@ -65,8 +67,10 @@
 
 			</table>
 		</div>
+    </div>
 	</div>
 
 </div>
+{% include 'footer.html' %}
 
 {% endblock %}
