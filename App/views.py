@@ -43,9 +43,6 @@ def login(request):
         return render(request, 'login.html')
 
 
-def logoutUser(request):
-	logout(request)
-	return redirect('login')
 
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
