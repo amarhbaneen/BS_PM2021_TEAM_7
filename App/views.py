@@ -8,7 +8,8 @@ from App.models import *
 
 def homepage(request):
     return render(request, 'dashboard.html')
-
+def home(requset):
+    return render(requset,'home.html')
 
 def login(request):
     if request.method == 'POST':
