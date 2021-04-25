@@ -14,5 +14,8 @@ urlpatterns = [
     path('editAdminMessage/<int:id>', views.admin_message_form, name='editAdminMessage'),
     path('deleteAdminMessage/<int:id>', views.admin_mesaage_delete, name='deleteAdminMessage'),
     path('createTeacherMessage', views.teacher_message_form, name='create_teacher_message'),
+    path('editTeacherMessage/<int:id>', views.teacher_message_form, name='editTeacherMessage'),
+    path('deleteTeacherMessage/<int:id>', views.teacher_mesaage_delete, name='deleteTeacherMessage'),
+    path('teacherMessages',views.showMessages,name="teacherMessages")
 
 ]

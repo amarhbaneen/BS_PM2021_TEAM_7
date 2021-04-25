@@ -12,7 +12,7 @@
 		<h5>My Messages</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-outline-primary  " href="">Add Message</a>
+			<a class="btn btn-outline-primary  " href="{% url 'create_teacher_message' %}">Add Message</a>
 			<table class="table table-sm">
 				<tr>
 					<th>Title</th>
@@ -21,15 +21,15 @@
 					<th>Update</th>
 					<th>Remove</th>
 				</tr>
-                {% for  i in message_list %}
+
                     <tr>
-              <td> {{ i.messageTitle }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+              <td> {{ message_list.messageTitle }}</td>
+                     <td>  <a class="btn btn-outline-success" href="{% url 'editTeacherMessage' message_list.id %}" role="button">Edit</a></td>
 
 
-                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                     <td>  <a class="btn btn-outline-danger" href="{% url 'deleteTeacherMessage' message_list.id %}" role="button">Delete</a></td>
                     </tr>
-                {% endfor %}
+
 
 			</table>
 		</div>
@@ -52,13 +52,14 @@
                 {% for i in homework_list %}
                     <tr>
               <td> {{ i.homeWorkTitle }}</td>
-                     <td>  <a class="btn btn-outline-success" href="{%  url 'homework_update' i.id %}" role="button">Edit</a></td>
 
 
-                     <td>  <form action="{% url 'homework_delete' i.id %}" method="post" class="d-inline">
+                         <td>  <a class="btn btn-outline-success" href="{%  url 'homework_update' i.id %}" role="button">Edit</a></td>
+
+
+                     <td>  <a class="btn btn-outline-danger" href="{% url 'homework_delete' i.id %}" method="post" role="button">Delete</a></td>
                         {% csrf_token %}
-                        <button type="submit" class="btn">
-                            <i class="btn btn-outline-success"> remove</i>
+
                         </button>
                         </form>
                      </td>

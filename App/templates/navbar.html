@@ -1,3 +1,4 @@
+{% load has_group %}
 <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
   <a class="navbar-brand" href="#">SchoolFun</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -5,8 +6,19 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/">Home</a>
-      <a class="nav-item nav-link" href="/users_all">Users</a>
+
+
+
+
+       {% if request.user|has_group:"teachers" %}
+                       <a class="nav-item nav-link" href="{% url 'teacher' %}">Home</a>
+      <a class="nav-item nav-link" href="{% url 'teacherMessages' %}">My messages</a>
+           {% else %}
+                 <a class="nav-item nav-link" href="/users_all">Users</a>
+
+
+
+{% endif %}
 
     </div>
   </div>
