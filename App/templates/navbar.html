@@ -7,14 +7,26 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
 
-
+<style>
+  .hello-msg{
+    font-size: 18px;
+    color: #fff;
+    margin-right: 20px;
+  }
+</style>
 
 
        {% if request.user|has_group:"teachers" %}
                        <a class="nav-item nav-link" href="{% url 'teacher' %}">Home</a>
       <a class="nav-item nav-link" href="{% url 'teacherMessages' %}">My messages</a>
+                      <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+
+
+
            {% else %}
-                 <a class="nav-item nav-link" href="/users_all">Users</a>
+                 <a class="nav-item nav-link" href="">Users</a>
+           <a class="nav-item nav-link" href="{% url 'homepage' %}">Home</a>
+
 
 
 
@@ -22,4 +34,9 @@
 
     </div>
   </div>
+ {% if request.user|has_group:"teachers" %}
+<span class="hello-msg">Hello, {{request.user}}</span>
+  <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+           {% endif %}
+
 </nav>

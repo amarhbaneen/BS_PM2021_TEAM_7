@@ -16,6 +16,7 @@ urlpatterns = [
     path('createTeacherMessage', views.teacher_message_form, name='create_teacher_message'),
     path('editTeacherMessage/<int:id>', views.teacher_message_form, name='editTeacherMessage'),
     path('deleteTeacherMessage/<int:id>', views.teacher_mesaage_delete, name='deleteTeacherMessage'),
-    path('teacherMessages',views.showMessages,name="teacherMessages")
+    path('teacherMessages',views.showMessages,name="teacherMessages"),
+    path('logout',views.logout,name="logout"),
 
 ]

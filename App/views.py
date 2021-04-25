@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django import template
 from django.contrib.auth.models import Group
@@ -41,6 +42,10 @@ def login(request):
     else:
         return render(request, 'login.html')
 
+
+def logoutUser(request):
+	logout(request)
+	return redirect('login')
 
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
