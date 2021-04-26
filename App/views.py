@@ -51,6 +51,7 @@ def logoutUser(request):
 # @author Amar Alsana
 def teacher_dashboard(request):
     # created Dashboard for the Teacher that shown for the teacher after loging in
+
     context = {'homework_list': HomeWork.objects.all(), 'message_list': TeacherMessage.objects.last(),
                'studentcount': TeacherMessage.objects.all().count(),
                'homeworkcount': HomeWork.objects.all().count(),
