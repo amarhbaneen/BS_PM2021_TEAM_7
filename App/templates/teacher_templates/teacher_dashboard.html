@@ -23,6 +23,7 @@
 				</tr>
 
                     <tr>
+                        {% if message_list  %}
               <td> {{ message_list.messageTitle }}</td>
                      <td>  <a class="btn btn-outline-success" href="{% url 'editTeacherMessage' message_list.id %}" role="button">Edit</a></td>
 
@@ -30,7 +31,7 @@
                      <td>  <a class="btn btn-outline-danger" href="{% url 'deleteTeacherMessage' message_list.id %}" role="button">Delete</a></td>
                     </tr>
 
-
+                    {% endif %}
 			</table>
 		</div>
 	</div>
