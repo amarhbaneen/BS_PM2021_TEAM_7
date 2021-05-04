@@ -19,8 +19,19 @@ def home(requset):
     return render(requset, 'home.html')
 
 
-def profile(requset):
-    return render(requset, 'profile.html')
+def profile(request):
+    user = request.user
+    form = UserCreationForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST, instance=form)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+
+
+    return render(request, 'profile.html',context)
 
 
 def login(request):

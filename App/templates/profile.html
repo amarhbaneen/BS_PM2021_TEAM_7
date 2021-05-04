@@ -1,4 +1,6 @@
 {%  extends 'base.html' %}
+{% load has_group %}
+
 {% block content %}
 
 <style>
@@ -14,7 +16,13 @@
 <div class="row">
 	<div class="col-md-3">
 		<div class="card card-body">
-			<a class="btn btn-outline-info" href="{% url 'home' %}"> &#8592; Back to Profile</a>
+             {% if request.user|has_group:"teachers" %}
+			<a class="btn btn-outline-info" href="{% url 'teacher' %}"> &#8592; Back to Profile</a>
+             {% elif request.user|has_group:"students" %}
+            <a class="btn btn-outline-info" href="{% url 'student_dashboard' %}"> &#8592; Back to Profile</a>
+            {% endif %}
+
+
 			<hr>
 			<h3 style="text-align: center">Account Settings</h3>
 			<hr>
@@ -26,6 +34,8 @@
 		<div class="card card-body">
 			
 			<form method="POST" action="" >
+                {% csrf_token %}
+				{{form.as_table}}
 
 
 		

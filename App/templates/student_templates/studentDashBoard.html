@@ -1,5 +1,7 @@
 {%  extends 'base.html' %}
 
+
+
 {% block content %}
 
 	<div class="col-md">
@@ -30,7 +32,7 @@
 					<th>Add solution</th>
 					<th>Edit solution</th>
 				</tr>
-                {% for  i in homework_list %}s
+                {% for  i in homework_list %}
                     <tr>
               <td> {{ i.homeWorkTitle }}</td>
                      <td>  <a class="btn btn-outline-success" href="#" role="button">Add</a></td>
