@@ -35,7 +35,7 @@ def login(request):
             return render(request, 'StudentPage.html')
         elif user is not None and user.groups.filter(name='teachers').exists():
             auth.login(request, user)
-            return render(request, 'teacher_templates/teacher_dashboard.html')
+            return redirect('teacher')
         else:
             messages.info(request, 'error')
             return redirect('login')
@@ -173,3 +173,16 @@ def admin_mesaage_delete(request, id):
     message = AdminMessage.objects.get(pk=id)
     message.delete()
     return redirect('homepage')
+ #-------------------------------------- Teacher Views ----------------------------------#
+# @author Amar Alsana
+def student_dashboard(request):
+    # created Dashboard for the student that shown for the teacher after loging in
+
+    context = {'homework_list': HomeWork.objects.all(), 'message_list':TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
+    'adminMessage': AdminMessage.objects.last(),'grade_list':Grade.objects.last()
+               }
+    # context = dictionary that content the whole elements that dashboard need to use
+    # @author Amar Alsana
+
+    return render(request, "student_templates/studentDashBoard.html", context)
+
