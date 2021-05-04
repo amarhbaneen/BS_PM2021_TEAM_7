@@ -9,7 +9,6 @@ from App.forms import *
 from App.models import *
 
 
-
 def homepage(request):
     return render(request, 'dashboard.html')
 
@@ -44,8 +43,9 @@ def login(request):
 
 
 def logoutUser(request):
-	logout(request)
-	return redirect('login')
+    logout(request)
+    return redirect('login')
+
 
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
@@ -97,8 +97,8 @@ def teacher_mesaage_delete(request, id):
 
 
 def showMessages(request):
-    messages=list(TeacherMessage.objects.filter(teacher=request.user.teacher))
-    return render(request,"teacher_templates/all_messages.html",{'messages':messages})
+    messages = list(TeacherMessage.objects.filter(teacher=request.user.teacher))
+    return render(request, "teacher_templates/all_messages.html", {'messages': messages})
 
 
 # -------------------------------------- homework Views ----------------------------------#
@@ -173,16 +173,35 @@ def admin_mesaage_delete(request, id):
     message = AdminMessage.objects.get(pk=id)
     message.delete()
     return redirect('homepage')
- #-------------------------------------- Teacher Views ----------------------------------#
+
+
+# -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
 def student_dashboard(request):
     # created Dashboard for the student that shown for the teacher after loging in
 
-    context = {'homework_list': HomeWork.objects.all(), 'message_list':TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
-    'adminMessage': AdminMessage.objects.last(),'grade_list':Grade.objects.last()
+    context = {'homework_list': HomeWork.objects.all(),
+               'message_list': TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
+               'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last()
                }
     # context = dictionary that content the whole elements that dashboard need to use
     # @author Amar Alsana
 
     return render(request, "student_templates/studentDashBoard.html", context)
 
+
+# ------------------------------------- bug Views ----------------------------------#
+# @author Amar Alsana
+def bugreport(request):
+    if request.method == "GET":
+
+        form = BugReportForm()
+        return render(request, "bugReport_templates/bugReport_form.html", {'form': form})
+    else:
+
+        form = BugReportForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return render(request,"bugReport_templates/thanks.html")
+
+        # @author Amar Alsana
