@@ -31,10 +31,29 @@
 
 
 {% endif %}
+     {% if request.user|has_group:"students" %}
+                       <a class="nav-item nav-link" href="{% url 'student_dashboard' %}">Home</a>
+      <a class="nav-item nav-link" href="{% url 'teacherMessages' %}">My HomeWorks</a>
+                      <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+
+
+
+           {% else %}
+                 <a class="nav-item nav-link" href="">Users</a>
+           <a class="nav-item nav-link" href="{% url 'homepage' %}">Home</a>
+
+
+
+
+{% endif %}
 
     </div>
   </div>
  {% if request.user|has_group:"teachers" %}
+<span class="hello-msg">Hello, {{request.user}}</span>
+  <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+           {% endif %}
+{% if request.user|has_group:"students" %}
 <span class="hello-msg">Hello, {{request.user}}</span>
   <span ><a  class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
            {% endif %}
