@@ -5,7 +5,7 @@
 	<div class="col-md">
 
 <div class="alert alert-success" role="alert">
-  <h4 class="alert-heading">{{ message_list.messageTitle }}</h4>
+  <h3 class="alert-heading">{{ message_list.messageTitle }}</h3>
   <p>{{ message_list.messageContent}}</p>
   <hr>
   <p class="mb-0">Please read your teacher messages </p>
@@ -15,44 +15,48 @@
 <br>
 
 <div class="row">
-	<div class="col-md-6">
-		<h5>Studnets</h5>
+<div class="col">
+	<div class="col-md">
+		<h5>My HomeWorks</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-outline-primary  " href="">Create Students</a>
+			<a class="btn btn-outline-primary  " href="">All homeWorks</a>
+
 			<table class="table table-sm">
 				<tr>
-					<th>User name</th>
+					<th>Title</th>
 
 
-					<th>Update</th>
-					<th>Remove</th>
+					<th>Add solution</th>
+					<th>Edit solution</th>
 				</tr>
-                {% for  i in students %}
+                {% for  i in homework_list %}s
                     <tr>
-              <td> {{ i.name }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+              <td> {{ i.homeWorkTitle }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Add</a></td>
 
 
-                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                     <td>  <a class="btn btn-warning" href="#" role="button">Edit</a></td>
                     </tr>
                 {% endfor %}
 
 			</table>
 		</div>
+    </div>
 	</div>
+<div class="col">
 
-	<div class="col-md-6">
-		<h5>Teachers</h5>
+	<div class="col-md">
+		<h5>Grades</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-outline-primary  " href="">Create Teacher</a>
+			<a class="btn btn-outline-primary  " href="">Show all Grades</a>
 			<table class="table table-sm">
 				<tr>
-					<th>User name</th>
+					<th>Title</th>
 
 
-					<th>Update</th>
+
 					<th>Remove</th>
 				</tr>
                 {% for i in teachers %}
@@ -67,6 +71,7 @@
 
 			</table>
 		</div>
+    </div>
 	</div>
 
 </div>

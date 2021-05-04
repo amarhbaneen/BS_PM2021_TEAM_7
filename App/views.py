@@ -178,7 +178,7 @@ def admin_mesaage_delete(request, id):
 def student_dashboard(request):
     # created Dashboard for the student that shown for the teacher after loging in
 
-    context = {'homework_list': HomeWork.objects.all(), 'message_list':TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
+    context = {'homework_list': HomeWork.objects.filter(teacher=request.user.teacher).all()[:3], 'message_list':TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
     'adminMessage': AdminMessage.objects.last(),'grade_list':Grade.objects.last()
                }
     # context = dictionary that content the whole elements that dashboard need to use
