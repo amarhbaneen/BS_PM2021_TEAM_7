@@ -105,9 +105,6 @@ def Student_Signup(request):
         return redirect('login')
 
 
-
-
-
 def logoutUser(request):
     logout(request)
     return redirect('login')
@@ -241,14 +238,14 @@ def admin_mesaage_delete(request, id):
     return redirect('homepage')
 
 
-# -------------------------------------- Teacher Views ----------------------------------#
+# -------------------------------------- student Views ----------------------------------#
 # @author Amar Alsana
 def student_dashboard(request):
     # created Dashboard for the student that shown for the teacher after loging in
-    student=Student.objects.get(user=request.user)
+    student = Student.objects.get(user=request.user)
 
-    context = {'homework_list': HomeWork.objects.all(),
-               'message_list': TeacherMessage.objects.filter(teacher=request.user.teacher).last(),
+    context = {'homework_list': HomeWork.objects.filter(teacher=student.teacher).all()[:3],
+               'message_list': TeacherMessage.objects.filter(teacher=student.teacher).last(),
                'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last()
                }
     # context = dictionary that content the whole elements that dashboard need to use
@@ -269,6 +266,6 @@ def bugreport(request):
         form = BugReportForm(request.POST)
         if form.is_valid():
             form.save()
-        return render(request,"bugReport_templates/thanks.html")
+        return render(request, "bugReport_templates/thanks.html")
 
         # @author Amar Alsana
