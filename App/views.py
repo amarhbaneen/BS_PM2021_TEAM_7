@@ -1,9 +1,11 @@
 from django.contrib import auth
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import logout, authenticate
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django import template
 from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
 
 from App.forms import *
 from App.models import *
@@ -40,6 +42,70 @@ def login(request):
             return redirect('login')
     else:
         return render(request, 'login.html')
+
+
+def Signup(request):
+    if request.method == 'POST':
+        result = request.POST.get('register_as:', True)
+        if result == "teacher":
+            return Teacher_Signup(request)
+        elif result == "student":
+            return Student_Signup(request)
+        else:
+            return redirect('Signup')
+    else:
+        return render(request, 'signup.html')
+
+
+def Teacher_Signup(request):
+    first_name = request.POST['first_name']
+    last_name = request.POST['last_name']
+    username = request.POST['username']
+    password1 = request.POST['password1']
+    password2 = request.POST['password2']
+    email = request.POST['email']
+    if password1 == password2:
+        if User.objects.filter(username=username):
+            return redirect('login')
+        else:
+            user = User.objects.create_user(username=username, email=email, password=password1,
+                                            last_name=last_name,
+                                            first_name=first_name)
+            user.save()
+            Teacher.objects.create(user=user)
+            my_group = Group.objects.get(name='teachers')
+            my_group.user_set.add(user)
+            print("user is created")
+            return redirect('login')
+    else:
+        return redirect('login')
+
+
+def Student_Signup(request):
+    first_name = request.POST['first_name']
+    last_name = request.POST['last_name']
+    username = request.POST['username']
+    password1 = request.POST['password1']
+    password2 = request.POST['password2']
+    email = request.POST['email']
+    if password1 == password2:
+        if User.objects.filter(username=username):
+            return redirect('login')
+        else:
+            user = User.objects.create_user(username=username, email=email, password=password1,
+                                            last_name=last_name,
+                                            first_name=first_name)
+            user.save()
+            Teacher.objects.create(user=user)
+            my_group = Group.objects.get(name='students')
+            my_group.user_set.add(user)
+            print("user is created")
+            return redirect('login')
+    else:
+        return redirect('login')
+
+
+
 
 
 def logoutUser(request):
