@@ -5,6 +5,7 @@ urlpatterns = [
     path('',views.home,name='home'),
     path('homepage', views.homepage, name='homepage'),
     path('login/', views.login, name='login'),
+    path('Registration/', views.Signup, name='Signup'),
     path('teacher', views.teacher_dashboard, name='teacher'),
     path('delete_homework/<int:id>/', views.homework_delete, name='homework_delete'),
     path('homeworkform/', views.homework_form, name='homework_form'),
