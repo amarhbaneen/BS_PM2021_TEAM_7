@@ -174,6 +174,13 @@ def showMessages(request):
     messages = list(TeacherMessage.objects.filter(teacher=request.user.teacher))
     return render(request, "teacher_templates/all_messages.html", {'messages': messages})
 
+def showSolutions(request):
+    teacher=Teacher.objects.get(user=request.user)
+    solutions=StudentSolution.objects.filter(teacher=teacher)
+    return render(request, "teacher_templates/all_solutions.html", {'solutions': solutions})
+
+
+
 
 # -------------------------------------- homework Views ----------------------------------#
 # @author Amar Alsana

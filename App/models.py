@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from ckeditor.fields import *
 
 
 # Create your models here.
@@ -37,7 +38,7 @@ class HomeWork(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     # every Homework have the id of the teacher who submit it
     # so we can send it to the student page who have the same teacher id
-    homeWorkContent = models.TextField()  # the content that include the questions of the homework
+    homeWorkContent = RichTextField(blank=True)  # the content that include the questions of the homework
     homeWorkTitle = models.TextField()
 
     def __str__(self):
@@ -48,6 +49,9 @@ class StudentSolution(models.Model):
     # teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     solutionContent = models.TextField()
+    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE,null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.student.__str__()
