@@ -42,7 +42,7 @@ class HomeWork(models.Model):
     homeWorkTitle = models.TextField()
 
     def __str__(self):
-        return self.teacher.__str__()
+        return self.homeWorkTitle
 
 
 class StudentSolution(models.Model):
