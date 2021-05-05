@@ -1,7 +1,20 @@
 {%  extends 'base.html' %}
 
 {% block content %}
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
 
+			<form method="get">
+                {{ myfilter.form }}
+
+		    <button class="btn btn-outline-primary " type="submit">Search</button>
+		  </form>
+
+		</div>
+	</div>
+
+</div>
 		<br>
 
 		<div class="row">
