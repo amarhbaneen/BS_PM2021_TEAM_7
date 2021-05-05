@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 
 from App.forms import *
 from App.models import *
+from App.filters import *
 
 
 def homepage(request):
@@ -177,7 +178,10 @@ def showMessages(request):
 def showSolutions(request):
     teacher=Teacher.objects.get(user=request.user)
     solutions=StudentSolution.objects.filter(teacher=teacher)
-    return render(request, "teacher_templates/all_solutions.html", {'solutions': solutions})
+    myFilter=StudentSolutionsFilter(request.GET,queryset=solutions)
+    solutions=myFilter.qs
+    context={'solutions': solutions,'myfilter':myFilter}
+    return render(request, "teacher_templates/all_solutions.html", context)
 
 
 
@@ -267,7 +271,7 @@ def student_dashboard(request):
                'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last()
                }
     # context = dictionary that content the whole elements that dashboard need to use
-    # @author Amar Alsana
+
 
     return render(request, "student_templates/studentDashBoard.html", context)
 
