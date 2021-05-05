@@ -20,6 +20,9 @@
                        <a class="nav-item nav-link" href="{% url 'teacher' %}">Home</a>
       <a class="nav-item nav-link" href="{% url 'teacherMessages' %}">My messages</a>
                       <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+           <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-item nav-link" href="{% url 'showSolutions' %}">Solutions</a>
+
 
 
 
@@ -31,13 +34,12 @@
      {% if request.user|has_group:"students" %}
                        <a class="nav-item nav-link" href="{% url 'student_dashboard' %}">Home</a>
       <a class="nav-item nav-link" href="{% url 'teacherMessages' %}">My HomeWorks</a>
-                      <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+         <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
 
 
 
-           {% else %}
-                 <a class="nav-item nav-link" href="">Users</a>
-           <a class="nav-item nav-link" href="{% url 'homepage' %}">Home</a>
+
+
 
 
 

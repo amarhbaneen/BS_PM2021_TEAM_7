@@ -20,6 +20,7 @@ urlpatterns = [
     path('teacherMessages',views.showMessages,name="teacherMessages"),
     path('logout',views.logoutUser,name="logout"),
     path('studentdashboard',views.student_dashboard,name="student_dashboard"),
-    path('bugreport',views.bugreport,name="bugreport")
+    path('bugreport',views.bugreport,name="bugreport"),
+    path('showSolutions', views.showSolutions, name="showSolutions")
 
 ]
