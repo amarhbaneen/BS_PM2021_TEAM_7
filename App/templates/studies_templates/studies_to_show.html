@@ -1,0 +1,44 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h4>my studies</h4>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+					<th>title </th>
+
+                    <th>content</th>
+                            <th> Finished </th>
+
+
+				</tr>
+
+                    {% for  i in studies %}
+                    <tr>
+              <td> {{ i.study.title }}</td>
+                <td> </td>
+                        {%  if i.finishedFlag == True %}
+                            <td><button type="button" class="btn btn-success" disabled>Success</button></td>
+                            {% else%}
+                           <td><a type="button" class="btn btn-danger" href={% url 'approve_study' i.id %}>Danger</a></td>
+                        {% endif %}
+
+
+
+
+                {% endfor %}
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+
+{% endblock content %}

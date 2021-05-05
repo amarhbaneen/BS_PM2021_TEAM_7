@@ -33,3 +33,5 @@ class BugReportForm(forms.ModelForm):
         fields='__all__'
     def __init__(self, *args, **kwargs):
         super(BugReportForm, self).__init__(*args, **kwargs)
+
+

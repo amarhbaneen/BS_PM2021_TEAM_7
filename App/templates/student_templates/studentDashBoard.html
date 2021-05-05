@@ -49,25 +49,25 @@
 <div class="col">
 
 	<div class="col-md">
-		<h5>Grades</h5>
+		<h5>Studies</h5>
 		<hr>
 		<div class="card card-body">
-			<a class="btn btn-outline-primary  " href="">Show all Grades</a>
+			<a class="btn btn-outline-primary  " href="{% url 'showAllStudies' %}">Show all studies</a>
 			<table class="table table-sm">
 				<tr>
 					<th>Title</th>
 
 
 
-					<th>Remove</th>
+					<th></th>
 				</tr>
-                {% for i in teachers %}
+                {% for i in studies_list %}
                     <tr>
-              <td> {{ i.name }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+              <td> {{ i.title }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">show</a></td>
 
 
-                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+
                     </tr>
                 {% endfor %}
 

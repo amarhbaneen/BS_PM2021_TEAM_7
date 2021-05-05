@@ -30,8 +30,7 @@ def profile(request):
 
     context = {'form': form}
 
-
-    return render(request, 'profile.html',context)
+    return render(request, 'profile.html', context)
 
 
 def login(request):
@@ -174,12 +173,11 @@ def showMessages(request):
     messages = list(TeacherMessage.objects.filter(teacher=request.user.teacher))
     return render(request, "teacher_templates/all_messages.html", {'messages': messages})
 
+
 def showSolutions(request):
-    teacher=Teacher.objects.get(user=request.user)
-    solutions=StudentSolution.objects.filter(teacher=teacher)
+    teacher = Teacher.objects.get(user=request.user)
+    solutions = StudentSolution.objects.filter(teacher=teacher)
     return render(request, "teacher_templates/all_solutions.html", {'solutions': solutions})
-
-
 
 
 # -------------------------------------- homework Views ----------------------------------#
@@ -264,7 +262,8 @@ def student_dashboard(request):
 
     context = {'homework_list': HomeWork.objects.filter(teacher=student.teacher).all()[:3],
                'message_list': TeacherMessage.objects.filter(teacher=student.teacher).last(),
-               'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last()
+               'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last(),
+               'studies_list': Studies.objects.filter(teacher=student.teacher).all()[:3]
                }
     # context = dictionary that content the whole elements that dashboard need to use
     # @author Amar Alsana
@@ -287,3 +286,15 @@ def bugreport(request):
         return render(request, "bugReport_templates/thanks.html")
 
         # @author Amar Alsana
+
+
+def showStudies(request):
+    studet =Student.objects.get(user= request.user)
+    studies = StudiesStudent.objects.filter(student=studet)
+    return render(request, "studies_templates/studies_to_show.html", {'studies': studies})
+
+def approveStudy(request,id):
+    studentStudy = StudiesStudent.objects.get(pk=id)
+    studentStudy.finishedFlag = True
+    studentStudy.save()
+    return  redirect('showAllStudies')
