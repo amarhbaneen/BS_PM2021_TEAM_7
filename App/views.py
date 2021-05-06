@@ -116,6 +116,30 @@ def Student_Signup(request):
         return redirect('login')
 
 
+def Solution_form(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = HomeworkForm()
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+
+            form = SolutionForm(instance=solution)
+
+        return render(request, "student_solution.html", {'form': form})
+    else:
+        if id == 0:
+            form = SolutionForm(request.POST)
+
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+            form = SolutionForm(request.POST, instance=solution)
+        if form.is_valid():
+            # homework_1 = form.save(commit=False)
+            # homework_1.teacher = Teacher.objects.get(user = request.user)
+            form.save()
+        return render(request, 'student_templates/studentDashBoard.html')
+
+
 def logoutUser(request):
     logout(request)
     return redirect('login')
@@ -176,11 +200,11 @@ def showMessages(request):
 
 
 def showSolutions(request):
-    teacher=Teacher.objects.get(user=request.user)
-    solutions=StudentSolution.objects.filter(teacher=teacher)
-    myFilter=StudentSolutionsFilter(request.GET,queryset=solutions)
-    solutions=myFilter.qs
-    context={'solutions': solutions,'myfilter':myFilter}
+    teacher = Teacher.objects.get(user=request.user)
+    solutions = StudentSolution.objects.filter(teacher=teacher)
+    myFilter = StudentSolutionsFilter(request.GET, queryset=solutions)
+    solutions = myFilter.qs
+    context = {'solutions': solutions, 'myfilter': myFilter}
     return render(request, "teacher_templates/all_solutions.html", context)
 
 
@@ -271,7 +295,6 @@ def student_dashboard(request):
                }
     # context = dictionary that content the whole elements that dashboard need to use
 
-
     return render(request, "student_templates/studentDashBoard.html", context)
 
 
@@ -293,12 +316,13 @@ def bugreport(request):
 
 
 def showStudies(request):
-    studet =Student.objects.get(user= request.user)
+    studet = Student.objects.get(user=request.user)
     studies = StudiesStudent.objects.filter(student=studet)
     return render(request, "studies_templates/studies_to_show.html", {'studies': studies})
 
-def approveStudy(request,id):
+
+def approveStudy(request, id):
     studentStudy = StudiesStudent.objects.get(pk=id)
     studentStudy.finishedFlag = True
     studentStudy.save()
-    return  redirect('showAllStudies')
+    return redirect('showAllStudies')
