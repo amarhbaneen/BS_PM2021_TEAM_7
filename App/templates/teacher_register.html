@@ -269,19 +269,18 @@ input[type=text]::placeholder {
 </style>
 
 
+
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
-    <a href="{% url 'login' %}"> <h2 class="inactive underlineHover">Sign In </h2> </a>
-    <h2 class="active"> Sign Up </h2>
 
-
-
-
+    <a href="{% url 'login' %}"> <h2 class="inactive underlineHover">Login </h2> </a>
     <!-- Login Form -->
-    <form method="post" action="{% url 'Signup' %}">
+    <form method="post" action="{% url 'teacher_register' %}">
         {% csrf_token %}
+        <b/>
       <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+      <input type="text" id="password1" class="fadeIn second" name="ID" placeholder="ID">
       <input type="text" id="password1" class="fadeIn second" name="password1" placeholder="password">
       <input type="text" id="password2" class="fadeIn second" name="password2" placeholder="confirm password">
       <input type="text" id="password" class="fadeIn third" name="first_name" placeholder="first name">
@@ -289,14 +288,21 @@ input[type=text]::placeholder {
       <input type="text" id="password" class="fadeIn third" name="email" placeholder="email">
       <input type="submit" class="fadeIn fourth" value="Sign Up">
 
-       <label for="st_te" >register as: </label>
-       <select name="register_as:">
-       <option value="teacher">Teacher</option>
-       <option value="student">Student</option>
-       </select>
-       </form>
 
 
+
+
+
+
+      <div>
+          {% for message in messages %}
+              <h3>{{ message }}</h3>
+          {% endfor %}
+      <div/>
+
+
+
+</form>
     <!-- Remind Passowrd -->
     <div id="formFooter">
       <a class="underlineHover" href="{% url 'login' %}">Forgot Password?</a>

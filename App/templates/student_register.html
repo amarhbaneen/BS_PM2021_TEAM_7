@@ -267,37 +267,52 @@ input[type=text]::placeholder {
   box-sizing: border-box;
 }
 </style>
+
+
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
-    <h2 class="active"> Sign In </h2>
-    <a href="{% url 'teacher_register' %}"> <h2 class="inactive underlineHover">Teacher Sign Up </h2> </a>
-    <a href="{% url 'student_register' %}"> <h2 class="inactive underlineHover">Student Sign Up </h2> </a>
 
-
-
-
+    <a href="{% url 'login' %}"> <h2 class="inactive underlineHover">Login </h2> </a>
 
     <!-- Login Form -->
-    <form method="post">
+    <form method="post" action="{% url 'student_register' %}">
         {% csrf_token %}
+        <b/>
       <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
-      <input type="text" id="password" class="fadeIn third" name="password" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+      <input type="text" id="password1" class="fadeIn second" name="ID" placeholder="ID">
+      <input type="text" id="password1" class="fadeIn second" name="password1" placeholder="password">
+      <input type="text" id="password2" class="fadeIn second" name="password2" placeholder="confirm password">
+      <input type="text" id="password" class="fadeIn third" name="first_name" placeholder="first name">
+      <input type="text" id="password" class="fadeIn third" name="last_name" placeholder="last_name">
+      <input type="text" id="password" class="fadeIn third" name="email" placeholder="email">
 
-    </form>
+      <br/>
+
+        <label>your Teacher:</label>
+        <select name="teachers" id="cars">
+        {% for teacher in teachers %}
+            <option value="{{ teacher.pk }}">{{ teacher.name }}</option>
+        {% endfor %}
+        </select>
+
+
+
+
+      <input type="submit" class="fadeIn fourth" value="Sign Up">
+
 
       <div>
-        {% for message in messages %}
-            <h3>{{ message }}</h3>
-        {% endfor %}
-    </div>
+          {% for message in messages %}
+              <h3>{{ message }}</h3>
+          {% endfor %}
+      </div>
 
+</form>
     <!-- Remind Passowrd -->
     <div id="formFooter">
       <a class="underlineHover" href="{% url 'login' %}">Forgot Password?</a>
     </div>
-
 
   </div>
 </div>

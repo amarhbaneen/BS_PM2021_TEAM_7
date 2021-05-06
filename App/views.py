@@ -38,7 +38,7 @@ def login(request):
             auth.login(request, user)
             return render(request, 'teacher_templates/teacher_dashboard.html')
         else:
-            messages.info(request, 'error')
+            messages.info(request, 'required field')
             return redirect('login')
     else:
         return render(request, 'login.html')
@@ -58,59 +58,75 @@ def Signup(request):
 
 
 def Teacher_Signup(request):
-    first_name = request.POST['first_name']
-    last_name = request.POST['last_name']
-    username = request.POST['username']
-    password1 = request.POST['password1']
-    password2 = request.POST['password2']
-    email = request.POST['email']
-    if password1 == password2:
-        if User.objects.filter(username=username):
-            return redirect('login')
+    if request.method == 'POST':
+        ID = request.POST['ID']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        email = request.POST['email']
+        if password1 == password2:
+            if User.objects.filter(username=username):
+                messages.info(request, 'username is taken')
+                return redirect('teacher_register')
+            else:
+                # Teacher_ID = User.objects.get(pk=request.user.id)
+                # if Teacher_ID==ID:
+                user = User.objects.create_user(username=username, email=email, password=password1,
+                                                last_name=last_name, first_name=first_name, ID=ID)
+                user.save()
+                Teacher.objects.create(user=user)
+                my_group = Group.objects.get(name='teachers')
+                my_group.user_set.add(user)
+                print("user is created")
+                return redirect('login')
         else:
-            user = User.objects.create_user(username=username, email=email, password=password1,
-                                            last_name=last_name,
-                                            first_name=first_name)
-            user.save()
-            Teacher.objects.create(user=user)
-            my_group = Group.objects.get(name='teachers')
-            my_group.user_set.add(user)
-            print("user is created")
-            return redirect('login')
+            messages.info(request, 'passwords doesnt mach')
+            return redirect('teacher_register')
     else:
-        return redirect('login')
+        return render(request, 'teacher_register.html')
 
 
 def Student_Signup(request):
-    first_name = request.POST['first_name']
-    last_name = request.POST['last_name']
-    username = request.POST['username']
-    password1 = request.POST['password1']
-    password2 = request.POST['password2']
-    email = request.POST['email']
-    if password1 == password2:
-        if User.objects.filter(username=username):
-            return redirect('login')
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        password1 = request.POST['password1']
+        password2 = request.POST['password2']
+        email = request.POST['email']
+        student_teacher = request.POST.get('teachers', True)
+        if password1 == password2:
+            if User.objects.filter(username=username):
+                messages.info(request, 'username is taken')
+                return redirect('student_register')
+            else:
+                user = User.objects.create_user(username=username, email=email, password=password1,
+                                                last_name=last_name,
+                                                first_name=first_name)
+                user.save()
+                Teacher.objects.create(user=user)
+                my_group = Group.objects.get(name='students')
+                my_group.user_set.add(user)
+                print("user is created")
+                return redirect('login')
         else:
-            user = User.objects.create_user(username=username, email=email, password=password1,
-                                            last_name=last_name,
-                                            first_name=first_name)
-            user.save()
-            Teacher.objects.create(user=user)
-            my_group = Group.objects.get(name='students')
-            my_group.user_set.add(user)
-            print("user is created")
-            return redirect('login')
+            messages.info(request, 'passwords doesnt mach')
+            return redirect('student_register')
     else:
-        return redirect('login')
-
-
+        return render(request, 'student_register.html')
 
 
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+
+def load_teachers(request):
+    teachers=Teacher.objects.get()
+    return render(request,'student_register.html',{'teachers':teachers})
 
 
 # -------------------------------------- Teacher Views ----------------------------------#
@@ -174,10 +190,6 @@ def homework_form(request, id=0):
     if request.method == "GET":
         if id == 0:
             form = HomeworkForm()
-
-
-
-
         else:
             homework = HomeWork.objects.get(pk=id)
 
