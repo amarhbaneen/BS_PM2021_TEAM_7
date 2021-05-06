@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h3> Create User</h3>
+    <div class="container">
+        <form action="{% url 'create_user' %}" method="post">
+            {% csrf_token %}
+        {{ form.as_ul}}
+           <!--<div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Create user</div>
+                    <div class="panel-body">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
+
+                        <div class="form-group clearfix">
+                            <label for="{{ form.username.id_for_label }}" class="col-md-2 control-label text-right">Username<span class="text-red">*</span>:</label>
+                            <span>
+                                {{ form.username }}
+                             </span>
+
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.email.id_for_label }}" class="col-md-2 control-label text-right">Email    <span class="text-red">*</span>:</label>
+                            <span>
+                                {{ form.email }}
+                             </span>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password1.id_for_label }}" class="col-md-2 control-label text-right">Password1<span class="text-red">*</span>:</label>
+                            <span>
+                                {{ form.password1 }}
+                             </span>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password2.id_for_label }}" class="col-md-2 control-label text-right">Confirm password:</label>
+                            <span>
+                                {{ form.password2 }}
+                             </span>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.user_type.id_for_label }}" class="col-md-2 control-label text-right">user type:</label>
+                            <span>
+                                {{ form.user_type }}
+                             </span>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.chose_teacher.id_for_label }}" class="col-md-0 control-label text-right">chose teacher:</label>
+                            <span>
+                                {{ form.chose_teacher }}
+                             </span>
+                        </div>
+                    <div class="row">
+                      <form >
+                        <div class="col-sm-3">
+                          <input type="submit" value="Add user" class="btn btn-success">
+                        </div>
+                        <div class="col-sm-3">
+                          <a href="{% url 'user_list' %}" class="btn btn-secondary ">Back to list</a>
+                             <i class="fas fa-stream"></i>
+                        </div>
+                      </form>
+                    </div>
+                    </div>
+                </div>
+            </div>-->
+        <div class="row">
+                      <form >
+                        <div class="col-sm-3">
+                          <input type="submit" value="Add user" class="btn btn-success">
+                        </div>
+                        <div class="col-sm-3">
+                          <a href="{% url 'user_list' %}" class="btn btn-secondary ">Back to list</a>
+                             <i class="fas fa-stream"></i>
+                        </div>
+                      </form>
+                    </div>
+        </form>
+    </div>
+{% endblock %}

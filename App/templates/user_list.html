@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+    <div class="row">
+              <div class="col">
+                       <div class="col-md">
+                        <form method="get">
+                            {{ myFilter.form }}
+
+                        <button class="btn btn-outline-primary " type="submit">Search</button>
+                      </form>
+                           </div>
+
+              </div>
+          </div>
+    <table class="table table-borderless">
+      <thead  class="border-bottom font-weight-bold ">
+      <tr>
+          <td>username</td>
+          <td>email</td>
+
+          <td>
+              <a href="{% url 'create_user'  %}"
+                 class=" btn text-secondary px-0">
+                   <button type="button" class="btn btn-success">Add New</button>
+
+              </a>
+          </td>
+
+      </tr>
+      </thead>
+      </thead>
+    <tbody>
+         {% for user in user_list %}
+          <tr>
+          <td>{{ user.username}} </td>
+          <td>{{user.email}} </td>
+          <td>
+              <a href="{% url 'update_user_info' user.id %}" >
+                  <button type="button" class="btn btn-secondary">update</button>
+              </a>
+              <form action="{%  url 'delete_user'  user.id %}" method="post" class="d-inline" >
+              {% csrf_token %}
+               <input class="btn btn-primary" type="submit" value="delete">
+              </form>
+               <a  class="btn btn-success" href="{% url 'show_details' user.id %}">Click To show</a>
+          </td>
+          </tr>
+
+         {% endfor %}
+    </tbody>
+    </table>
+
+
+
+{% endblock  %}
