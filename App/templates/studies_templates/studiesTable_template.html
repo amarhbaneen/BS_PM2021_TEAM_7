@@ -1,0 +1,44 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+		<br>
+
+    <div class="col-md">
+        <a type="button" class="btn btn-info" href={% url 'addstudy'%}>Add new Study</a> </div>
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h4>My Studies</h4>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+
+
+                    <th>Studies Title</th>
+                    <th> show/edit </th>
+                            <th>delete</th>
+
+
+				</tr>
+
+                    {% for  i in studies %}
+                    <tr>
+              <td> {{ i.title }}</td>
+                   <td> <a type="button" class="btn btn-primary" href="{% url "study_update" i.id %}">edit </a></td>
+                        <td><a type="button" class="btn btn-danger" href="{% url "study_delete" i.id %}">delete </a></td>
+
+
+
+
+                    </tr>
+                {% endfor %}
+
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+{% endblock content %}

@@ -12,10 +12,10 @@
        {% if request.user|has_group:"teachers" %}
     <a class="btn btn-primary btn-sm" href="{% url "teacher" %}" role="button">Continue to homepage</a>
      {% endif %}
-    {% if request.user|has_group:"teachers" %}
+    {% if request.user|has_group:"students" %}
     <a class="btn btn-primary btn-sm" href="{% url "student_dashboard" %}" role="button">Continue to homepage</a>
      {% endif %}
-    {% if request.user|has_group:"teachers" %}
+    {% if request.user|has_group:"admin" %}
     <a class="btn btn-primary btn-sm" href="{% url "homepage" %}" role="button">Continue to homepage</a>
      {% endif %}
   </p>

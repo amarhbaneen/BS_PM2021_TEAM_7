@@ -23,6 +23,10 @@ urlpatterns = [
     path('bugreport',views.bugreport,name="bugreport"),
     path('showSolutions', views.showSolutions, name="showSolutions"),
     path('allstudies',views.showStudies,name='showAllStudies'),
-    path('approveStudy/<int:id>',views.approveStudy,name="approve_study")
+    path('approveStudy/<int:id>',views.approveStudy,name="approve_study"),
+    path('studiesTeacher',views.showStudiesTeacher,name="showStudentTeacher"),
+    path('studyForm',views.study_form,name="addstudy"),
+    path('studyform/<int:id>',views.study_form,name="study_update"),
+    path('studyform_delete/<int:id>', views.study_delete, name="study_delete")
 
 ]

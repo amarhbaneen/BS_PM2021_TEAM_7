@@ -25,9 +25,9 @@
               <td> {{ i.study.title }}</td>
                 <td> </td>
                         {%  if i.finishedFlag == True %}
-                            <td><button type="button" class="btn btn-success" disabled>Success</button></td>
+                            <td><button type="button" class="btn btn-success" disabled>Approved</button></td>
                             {% else%}
-                           <td><a type="button" class="btn btn-danger" href={% url 'approve_study' i.id %}>Danger</a></td>
+                           <td><a type="button" class="btn btn-danger" href={% url 'approve_study' i.id %}>Approve?</a></td>
                         {% endif %}
 
 
