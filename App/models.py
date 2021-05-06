@@ -69,7 +69,7 @@ class Grade(models.Model):
 
 class Studies(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    contentLink = models.TextField()
+    contentLink = RichTextField(blank=True)
     title = models.TextField()
 
     def __str__(self):
