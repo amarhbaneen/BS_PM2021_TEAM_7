@@ -50,7 +50,7 @@ class StudentSolution(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     solutionContent = models.TextField()
     homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE,null=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
 
 
     def __str__(self):
@@ -58,13 +58,12 @@ class StudentSolution(models.Model):
 
 
 class Grade(models.Model):
-    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    solution = models.ForeignKey(StudentSolution, on_delete=models.CASCADE,null=True)
     grade = models.FloatField()
-    teacherComment = models.TextField()
+    teacherComment = RichTextField(blank=True)
 
     def __str__(self):
-        return self.student.__str__() + self.grade
+        return self.solution.student.__str__() + self.solution.homeWork.__str__()
 
 
 class Studies(models.Model):

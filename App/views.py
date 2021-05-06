@@ -209,6 +209,35 @@ def showSolutions(request):
     return render(request, "teacher_templates/all_solutions.html", context)
 
 
+# ------------------------ Grades Views ---------------------
+def addGrade(request,id):
+    GradeFormSet = inlineformset_factory(StudentSolution, Grade, fields=('grade', 'teacherComment'),extra=0)
+    solution = StudentSolution.objects.get(pk=id)
+    formset = GradeFormSet(instance=solution)
+    # form = OrderForm(initial={'customer':customer})
+    if request.method == 'POST':
+        # print('Printing POST:', request.POST)
+        # form = OrderForm(request.POST)
+        formset = GradeFormSet(request.POST, instance=solution)
+        if formset.is_valid():
+            formset.save()
+            return redirect('teacher')
+
+    context = {'form': formset,'solution':solution}
+    return render(request, 'teacher_templates/addGrade.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
 # -------------------------------------- homework Views ----------------------------------#
 # @author Amar Alsana
 def homework_form(request, id=0):

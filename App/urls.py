@@ -31,6 +31,7 @@ urlpatterns = [
     path('studyform_delete/<int:id>', views.study_delete, name="study_delete"),
     path('allhomework_student',views.showHomework,name='showhomeworkstudent'),
     path('myHomeWorks',views.showStudentHomeworks,name="myHomeWorks"),
-    path('showHomeWork/<int:id>',views.showSingleHomeWork,name="showHomeWork")
+    path('showHomeWork/<int:id>',views.showSingleHomeWork,name="showHomeWork"),
+    path('addGrade/<int:id>', views.addGrade, name="addGrade"),
 
 ]

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+    <style>
+    #id_messageContent
+ {
+    width: 800px;
+    height: 300px;
+}
+
+        #id_messageTitle
+ {
+    width: 800px;
+    height: 60px;
+}
+        #submit_btn
+        {
+            margin-top: 20px;
+        }
+
+    </style>
+
+
+    <div class="container">
+        <div class="col-md-10 offset-md-1 mt-5">
+
+
+
+
+            <form action="" method="POST">
+				{% csrf_token %}
+				{{ form.management_form }}
+                {% for field in form %}
+
+                    <div class="row" style=align-content:center>
+
+                     <p style=text-align:center>
+                        Student name  :
+                     </p>
+
+
+
+
+                             {{solution.student}}
+                         </div>
+
+                 <div class="row" style=align-content:center>
+
+                     <p style=text-align:center>
+                        Homework Title  :
+                     </p>
+
+
+
+                             {{solution.homeWork.homeWorkTitle}}
+                     </div>
+
+
+                     <div class="row" style=align-content:center>
+
+                     <p style=text-align:center>
+                        Grade  :
+                     </p>
+
+                     </div>
+                     <div class="row">
+
+                             {{field.grade}}
+                     </div>
+                     <div class="row" style=align-content:center>
+
+                     <p style=text-align:center>
+                        Teacher comment :
+                     </p>
+
+                     </div>
+                     <div class="row">
+
+                             {{field.teacherComment}}
+                            {{field.media}}
+
+                     </div>
+                {% endfor %}
+
+
+                            <button type="submit" class="btn btn-outline-success " style="position: center" id="submit_btn"><i class="fas fa-save"></i> submit</button>
+                     </form>
+
+
+            </div>
+
+    </div>
+
+{% endblock %}
