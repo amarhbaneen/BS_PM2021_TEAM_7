@@ -1,18 +1,82 @@
-<!DOCTYPE html>
-<html>
+{%  extends 'base.html' %}
 
-<head>
-  <title>Our Company</title>
-</head>
 
-<body>
+{% csrf_token %}
+{% block content %}
 
-  <h1>Welcome to StudentPage</h1>
+	<div class="col-md">
 
-  <p>Pages (HTML)</p>
-  <p>Style Sheets (CSS)</p>
-  <p>Computer Code (JavaScript)</p>
-  <p>Live Data (Files and Databases)</p>
+<div class="alert alert-success" role="alert">
+  <h3 class="alert-heading">{{ message_list.messageTitle }}</h3>
+  <p>{{ message_list.messageContent}}</p>
+  <hr>
+  <p class="mb-0">Please read your teacher messages </p>
+</div>
+</div>
 
-</body>
-</html>
+<br>
+
+<div class="row">
+<div class="col">
+	<div class="col-md">
+		<h5>My HomeWorks</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="">All homeWorks</a>
+
+			<table class="table table-sm">
+				<tr>
+					<th>Title</th>
+
+
+					<th><a href="{% url 'Solution_form' %}"> <h2 class="inactive underlineHover">Add solution </h2> </a></th>
+
+					<th>Edit solution</th>
+				</tr>
+                {% for  i in homework_list %}
+                    <tr>
+              <td> {{ i.homeWorkTitle }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">Add</a></td>
+
+
+                     <td>  <a class="btn btn-warning" href="#" role="button">Edit</a></td>
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+    </div>
+	</div>
+<div class="col">
+
+	<div class="col-md">
+		<h5>Studies</h5>
+		<hr>
+		<div class="card card-body">
+			<a class="btn btn-outline-primary  " href="{% url 'showAllStudies' %}">Show all studies</a>
+			<table class="table table-sm">
+				<tr>
+					<th>Title</th>
+
+
+
+					<th></th>
+				</tr>
+                {% for i in studies_list %}
+                    <tr>
+              <td> {{ i.title }}</td>
+                     <td>  <a class="btn btn-outline-success" href="#" role="button">show</a></td>
+
+
+
+                    </tr>
+                {% endfor %}
+
+			</table>
+		</div>
+    </div>
+	</div>
+
+</div>
+
+{% endblock %}

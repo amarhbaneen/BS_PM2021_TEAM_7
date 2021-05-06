@@ -118,6 +118,35 @@ def Student_Signup(request):
         return render(request, 'student_register.html')
 
 
+def Solution_form(request, id=0):
+    if request.method == "GET":
+        if id == 0:
+            form = HomeworkForm()
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+
+            form = SolutionForm(instance=solution)
+
+        return render(request, "student_solution.html", {'form': form})
+    else:
+        if id == 0:
+            form = SolutionForm(request.POST)
+
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+            form = SolutionForm(request.POST, instance=solution)
+        if form.is_valid():
+            # homework_1 = form.save(commit=False)
+            # homework_1.teacher = Teacher.objects.get(user = request.user)
+            form.save()
+        return render(request, 'StudentPage.html')
+
+
+def showStudies(request):
+    student = Student.objects.get(user=request.user)
+    studies = StudiesStudent.objects.filter(student=student)
+    return render(request, "studies_to_show.html", {'studies': studies})
+
 
 def logoutUser(request):
     logout(request)
@@ -125,8 +154,8 @@ def logoutUser(request):
 
 
 def load_teachers(request):
-    teachers=Teacher.objects.get()
-    return render(request,'student_register.html',{'teachers':teachers})
+    teachers = Teacher.objects.all()
+    return render(request, 'student_register.html', {'teachers': teachers})
 
 
 # -------------------------------------- Teacher Views ----------------------------------#

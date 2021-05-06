@@ -11,6 +11,15 @@ class HomeworkForm(forms.ModelForm):
         super(HomeworkForm, self).__init__(*args, **kwargs)
 
 
+class SolutionForm(forms.ModelForm):
+    class Meta:
+        model = StudentSolution
+        fields = ('solutionContent', 'student')
+
+    def __init__(self, *args, **kwargs):
+        super(SolutionForm, self).__init__(*args, **kwargs)
+
+
 class AdminMessageForm(forms.ModelForm):
     class Meta:
         model = AdminMessage
