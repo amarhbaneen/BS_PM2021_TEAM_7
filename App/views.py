@@ -138,7 +138,7 @@ def Solution_form(request, id=0):
             # homework_1 = form.save(commit=False)
             # homework_1.teacher = Teacher.objects.get(user = request.user)
             form.save()
-        return render(request, 'student_templates/studentDashBoard.html')
+        return redirect( '/studentdashboard')
 
 
 def logoutUser(request):
@@ -255,7 +255,12 @@ def showHomework(request):
     contex = {'homeworks': homeworks}
     return render(request, 'homework_templates/all_homeworks_student.html',contex)
 
+def showstudy(request):
+    student = Student.objects.get(user=request.user)
 
+
+    contex = {}
+    return render(request, 'homework_templates/all_homeworks_student.html',contex)
 # -------------------------------------- Admin Views ----------------------------------#
 def admin_message_form(request, id=0):
     # creating new form for inserting or editing existed admin messages
