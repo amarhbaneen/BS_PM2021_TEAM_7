@@ -36,7 +36,7 @@
                     <tr>
               <td> {{ i.student }}</td>
                         <td> {{ i.homeWork }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Add Grade</a></td>
+                     <td>  <a class="btn btn-outline-success" href={% url 'addGrade' i.id %} role="button">Add Grade</a></td>
 
 
 
