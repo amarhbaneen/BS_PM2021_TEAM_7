@@ -1,0 +1,38 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h4>My HomeWorks</h4>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+					<th>HomeWork Title</th>
+
+
+					<th>Full acsses</th>
+					<th> solutions</th>
+				</tr>
+
+                    {% for  i in homework_list %}
+                    <tr>
+              <td> {{ i.homeWorkTitle}}</td>
+                     <td>  <a class="btn btn-outline-success" href={% url 'showHomeWork' i.id %}>Click To show</a></td>
+
+
+                     <td>  <a class="btn btn-outline-info" href="#" role="button">Add solution</a></td>
+                    </tr>
+                {% endfor %}
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+
+{% endblock content %}

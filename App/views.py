@@ -281,6 +281,19 @@ def student_dashboard(request):
 
     return render(request, "student_templates/studentDashBoard.html", context)
 
+def showStudentHomeworks(request):
+    student = Student.objects.get(user=request.user)
+    homeworks=HomeWork.objects.filter(teacher=student.teacher)
+    context = {'homework_list': homeworks}
+    return render(request, "student_templates/showStudentHomeworks.html", context)
+
+
+def showSingleHomeWork(request,id):
+    homework=HomeWork.objects.get(pk=id)
+    form=HomeworkForm(instance=homework)
+    context = {'homework': homework}
+    return render(request, "student_templates/showSingleHomeWork.html", context)
+
 
 # ------------------------------------- bug Views ----------------------------------#
 # @author Amar Alsana
