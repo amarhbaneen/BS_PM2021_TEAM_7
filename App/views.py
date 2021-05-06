@@ -2,6 +2,7 @@ from django.contrib import auth
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django import template
 from django.contrib.auth.models import Group
@@ -224,6 +225,13 @@ def homework_delete(request, id):
     return redirect('/teacher')
 
 
+def showHomework(request):
+    student = Student.objects.get(user=request.user)
+    homeworks = HomeWork.objects.filter(teacher=student.teacher).all()
+    contex = {'homeworks': homeworks}
+    return render(request, 'homework_templates/all_homeworks_student.html',contex)
+
+
 # -------------------------------------- Admin Views ----------------------------------#
 def admin_message_form(request, id=0):
     # creating new form for inserting or editing existed admin messages
@@ -326,6 +334,12 @@ def study_form(request, id=0):
     else:
         if id == 0:
             form = studyForm(request.POST)
+            teacher = Teacher.objects.get(user=request.user)
+            student = Student.objects.filter(teacher=teacher)
+
+            for i in student:
+                new_study_student = StudiesStudent.objects.create(student=i, study=form.save(), finishedFlag=False)
+                new_study_student.save()
 
         else:
             study = Studies.objects.get(pk=id)
@@ -334,7 +348,8 @@ def study_form(request, id=0):
             form.save()
         return redirect('showStudentTeacher')
 
-def study_delete(request,id):
-    study=Studies.objects.get(pk=id)
+
+def study_delete(request, id):
+    study = Studies.objects.get(pk=id)
     study.delete()
     return redirect('showStudentTeacher')

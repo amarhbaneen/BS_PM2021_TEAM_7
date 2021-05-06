@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
     <style>
-    #id_messageContent
+    #id_contentLink
  {
     width: 800px;
     height: 300px;
 }
-
-        #id_messageTitle
+        #id_title
  {
     width: 800px;
     height: 60px;
@@ -20,7 +19,7 @@
     </style>
 
 
-    <div class="container">
+  <div class="container">
         <div class="col-md-10 offset-md-1 mt-5">
 
                 <h1 class="display-4">New Study </h1>
@@ -29,13 +28,17 @@
                  <form action="" method="post" autocomplete="off">
                     {% csrf_token %}
 
+				     <div class="row" style=align-content:center>
+                        <p style=text-align:center>
+                        Teacher:
+                     </p>
+
+
+                     </div>
 
                        <div class="row" style=align-content:center>
 
-                     <p style=text-align:center>
-                        Message Writer  :
-                     </p>
-                           <div class="row" style=align-content:center> {{ form.teacher }} </div>
+                            {{ form.teacher }}
                      </div>
                        <div class="row" style=align-content:center>
 
@@ -58,6 +61,7 @@
                      <div class="row">
 
                              {{form.contentLink}}
+                         {{form.media}}
                      </div>
 
 

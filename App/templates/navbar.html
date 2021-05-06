@@ -34,14 +34,22 @@
 {% endif %}
      {% if request.user|has_group:"admins" %}
          <a class="nav-item nav-link" href="{% url 'dashboard' %}">Home</a>
-
+         {% endif %}
+     {% if request.user|has_group:"students" %}
+                       <a class="nav-item nav-link" href="{% url 'student_dashboard' %}">Home</a>
+      <a class="nav-item nav-link" href="{% url 'showhomeworkstudent' %}">My HomeWorks</a>
          <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
 
 
 
 
+         <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
 
-{% endif %}
+        {% endif %}
+
+
+
+
 
        <a class="nav-item nav-link" href="{% url 'bugreport' %}">Report Bug </a>
     </div>
