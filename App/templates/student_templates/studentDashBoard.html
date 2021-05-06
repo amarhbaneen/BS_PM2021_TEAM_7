@@ -35,7 +35,7 @@
                 {% for  i in homework_list %}
                     <tr>
               <td> {{ i.homeWorkTitle }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Add</a></td>
+                     <td>  <a class="btn btn-outline-success" href="{% url 'Solution_form' %}" role="button">Add</a></td>
 
 
                      <td>  <a class="btn btn-warning" href="#" role="button">Edit</a></td>

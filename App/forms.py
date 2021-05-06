@@ -29,13 +29,13 @@ class TeacherMessageForm(forms.ModelForm):
         super(TeacherMessageForm, self).__init__(*args, **kwargs)
 
 
-class BugReportForm(forms.ModelForm):
+class SolutionForm(forms.ModelForm):
     class Meta:
-        model = Bugreport
-        fields = '__all__'
+        model = StudentSolution
+        fields = ('solutionContent', 'student')
 
     def __init__(self, *args, **kwargs):
-        super(BugReportForm, self).__init__(*args, **kwargs)
+        super(SolutionForm, self).__init__(*args, **kwargs)
 
 class studyForm(forms.ModelForm):
     class Meta:
@@ -44,3 +44,10 @@ class studyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(studyForm, self).__init__(*args, **kwargs)
+class BugReportForm(forms.ModelForm):
+    class Meta:
+        model = Bugreport
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(BugReportForm, self).__init__(*args, **kwargs)
