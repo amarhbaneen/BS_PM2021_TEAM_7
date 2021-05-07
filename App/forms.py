@@ -36,7 +36,7 @@ class TeacherMessageForm(forms.ModelForm):
 class SolutionForm(forms.ModelForm):
     class Meta:
         model = StudentSolution
-        fields = ('solutionContent', 'student')
+        fields = ('student','homeWork','solutionContent')
 
     def __init__(self, *args, **kwargs):
         super(SolutionForm, self).__init__(*args, **kwargs)

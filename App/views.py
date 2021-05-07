@@ -3,15 +3,14 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django import template
-from django.contrib.auth.models import Group,User
+from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
 
 from App.forms import *
 from App.models import *
 from App.filters import *
-
 
 
 def adminPage(request):
@@ -118,28 +117,17 @@ def Student_Signup(request):
         return redirect('login')
 
 
-def Solution_form(request, id=0):
-    if request.method == "GET":
-        if id == 0:
-            form = HomeworkForm()
-        else:
-            solution = StudentSolution.objects.get(pk=id)
-
-            form = SolutionForm(instance=solution)
-
-        return render(request, "student_solution.html", {'form': form})
-    else:
-        if id == 0:
-            form = SolutionForm(request.POST)
-
-        else:
-            solution = StudentSolution.objects.get(pk=id)
-            form = SolutionForm(request.POST, instance=solution)
-        if form.is_valid():
-            # homework_1 = form.save(commit=False)
-            # homework_1.teacher = Teacher.objects.get(user = request.user)
-            form.save()
-        return redirect( '/studentdashboard')
+def Solution_form(request):
+    form = SolutionForm(request.POST or None)
+    if form.is_valid():
+        if request.user.is_authenticated:
+            student_username = request.user.username
+        form.student=student_username
+        form.save()
+    context = {
+        'form': form
+    }
+    return render(request, 'student_solution.html', context)
 
 
 def logoutUser(request):
@@ -168,10 +156,6 @@ def teacher_message_form(request, id=0):
     if request.method == "GET":
         if id == 0:
             form = TeacherMessageForm()
-
-
-
-
         else:
             message = TeacherMessage.objects.get(pk=id)
 
@@ -211,8 +195,8 @@ def showSolutions(request):
 
 
 # ------------------------ Grades Views ---------------------
-def addGrade(request,id):
-    GradeFormSet = inlineformset_factory(StudentSolution, Grade, fields=('grade', 'teacherComment'),extra=0)
+def addGrade(request, id):
+    GradeFormSet = inlineformset_factory(StudentSolution, Grade, fields=('grade', 'teacherComment'), extra=0)
     solution = StudentSolution.objects.get(pk=id)
     formset = GradeFormSet(instance=solution)
     # form = OrderForm(initial={'customer':customer})
@@ -224,19 +208,8 @@ def addGrade(request,id):
             formset.save()
             return redirect('teacher')
 
-    context = {'form': formset,'solution':solution}
+    context = {'form': formset, 'solution': solution}
     return render(request, 'teacher_templates/addGrade.html', context)
-
-
-
-
-
-
-
-
-
-
-
 
 
 # -------------------------------------- homework Views ----------------------------------#
@@ -283,14 +256,16 @@ def showHomework(request):
     student = Student.objects.get(user=request.user)
     homeworks = HomeWork.objects.filter(teacher=student.teacher).all()
     contex = {'homeworks': homeworks}
-    return render(request, 'homework_templates/all_homeworks_student.html',contex)
+    return render(request, 'homework_templates/all_homeworks_student.html', contex)
+
 
 def showstudy(request):
     student = Student.objects.get(user=request.user)
 
-
     contex = {}
-    return render(request, 'homework_templates/all_homeworks_student.html',contex)
+    return render(request, 'homework_templates/all_homeworks_student.html', contex)
+
+
 # -------------------------------------- Admin Views ----------------------------------#
 def admin_message_form(request, id=0):
     # creating new form for inserting or editing existed admin messages
@@ -340,16 +315,17 @@ def student_dashboard(request):
 
     return render(request, "student_templates/studentDashBoard.html", context)
 
+
 def showStudentHomeworks(request):
     student = Student.objects.get(user=request.user)
-    homeworks=HomeWork.objects.filter(teacher=student.teacher)
+    homeworks = HomeWork.objects.filter(teacher=student.teacher)
     context = {'homework_list': homeworks}
     return render(request, "student_templates/showStudentHomeworks.html", context)
 
 
-def showSingleHomeWork(request,id):
-    homework=HomeWork.objects.get(pk=id)
-    form=HomeworkForm(instance=homework)
+def showSingleHomeWork(request, id):
+    homework = HomeWork.objects.get(pk=id)
+    form = HomeworkForm(instance=homework)
     context = {'homework': homework}
     return render(request, "student_templates/showSingleHomeWork.html", context)
 
@@ -427,78 +403,71 @@ def study_delete(request, id):
     return redirect('showStudentTeacher')
 
 
-
-
-
-
-
-
 def user_list(request):
-    context=User.objects.all()
-    just_user=[]
+    context = User.objects.all()
+    just_user = []
     for con in context:
         if not con.is_superuser:
             just_user.append(con)
 
     myFilter = userFilter(request.GET, queryset=User.objects.all())
-    user_list=myFilter.qs
-    context = {'user_list': user_list,'myFilter':myFilter}
-    return render(request,"user_list.html",context)
+    user_list = myFilter.qs
+    context = {'user_list': user_list, 'myFilter': myFilter}
+    return render(request, "user_list.html", context)
 
 
-def user_form_edit(request,id):
-        user =User.objects.get(pk=id)
-        form = addUserForm(instance=user)
-        if request.method == 'POST':
-            form = addUserForm(request.POST, instance=form)
-            if form.is_valid():
-                form.save()
+def user_form_edit(request, id):
+    user = User.objects.get(pk=id)
+    form = addUserForm(instance=user)
+    if request.method == 'POST':
+        form = addUserForm(request.POST, instance=form)
+        if form.is_valid():
+            form.save()
 
-        context = {'form': form}
-        return render(request,'user_form_info.html',context)
-       # return render(request, 'profile.html', context)
-
-    # instance=get_object_or_404(User,id=id)
-    # form=addUserForm(instance=instance)
-    # if request.method=='POST':
-    #     form=addUserForm(request.POST,instance=instance)
-    #     if form.is_valid():
-    #         form.save()
-    #         return redirect('user_list')
-    # return render(request,'create_user.html',{'form':form})
+    context = {'form': form}
+    return render(request, 'user_form_info.html', context)
 
 
+# return render(request, 'profile.html', context)
 
-def delete_user(request,id):
+# instance=get_object_or_404(User,id=id)
+# form=addUserForm(instance=instance)
+# if request.method=='POST':
+#     form=addUserForm(request.POST,instance=instance)
+#     if form.is_valid():
+#         form.save()
+#         return redirect('user_list')
+# return render(request,'create_user.html',{'form':form})
+
+
+def delete_user(request, id):
     user = User.objects.get(pk=id)
     user.delete()
     return redirect('user_list')
 
 
-
 def create_user(request):
     form = addUserForm()
-    if request.method=='POST':
-        form=addUserForm(request.POST)
+    if request.method == 'POST':
+        form = addUserForm(request.POST)
         if form.is_valid():
-            curr_user =form.save()
+            curr_user = form.save()
             if form.clean_user_type() in ('Student', 'student'):
-                user=User.objects.get(username=form.clean_chose_teacher())
+                user = User.objects.get(username=form.clean_chose_teacher())
                 teacher = Teacher.objects.get(user=user)
-                Student.objects.create(user=curr_user,teacher=teacher)
+                Student.objects.create(user=curr_user, teacher=teacher)
 
             elif form.clean_user_type() in ('Teacher', 'teacher'):
                 Teacher.objects.create(user=curr_user)
-                #Teacher.objects.create(user_id=curr_user)
+                # Teacher.objects.create(user_id=curr_user)
             return redirect('user_list')
-    return render(request,"create_user.html",{"form":form})
+    return render(request, "create_user.html", {"form": form})
 
 
-
-def showUser(request,id):
-    user=User.objects.get(pk=id)
-    context={'user':user}
-    return render(request,'show_details.html',context)
+def showUser(request, id):
+    user = User.objects.get(pk=id)
+    context = {'user': user}
+    return render(request, 'show_details.html', context)
 
 # def search(request):
 #     if request.method=='POST':
@@ -508,6 +477,3 @@ def showUser(request,id):
 #         return render(request,'user_list.html',{'user_filter':user_filter})
 #     else:
 #         return render(request,'user_list.html',{})
-
-
-

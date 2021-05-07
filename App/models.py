@@ -47,9 +47,9 @@ class HomeWork(models.Model):
 
 class StudentSolution(models.Model):
     # teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE, null=True)
     solutionContent = models.TextField()
-    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE,null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
 
 
