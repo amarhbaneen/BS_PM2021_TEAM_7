@@ -5,7 +5,7 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'amarhabneen/bm_team7'
+                    image 'amarhabneen/new_image'
                 }
             }
             steps {
