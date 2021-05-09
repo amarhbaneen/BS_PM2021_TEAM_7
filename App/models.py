@@ -47,18 +47,17 @@ class HomeWork(models.Model):
 
 class StudentSolution(models.Model):
     # teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE, null=True)
     solutionContent = models.TextField()
-    homeWork = models.ForeignKey(HomeWork, on_delete=models.CASCADE,null=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
-
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.student.__str__()
+        return "student :" + self.student.__str__() + "   Solution " + self.solutionContent
 
 
 class Grade(models.Model):
-    solution = models.ForeignKey(StudentSolution, on_delete=models.CASCADE,null=True)
+    solution = models.ForeignKey(StudentSolution, on_delete=models.CASCADE, null=True)
     grade = models.FloatField()
     teacherComment = RichTextField(blank=True)
 
@@ -93,7 +92,7 @@ class AdminMessage(models.Model):
 
 
 class TeacherMessage(models.Model):
-    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE,null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
     messageTitle = models.TextField(default="")
     messageContent = models.TextField()
 
@@ -107,5 +106,3 @@ class Bugreport(models.Model):
 
     def __str__(self):
         return self.bugContent
-
-

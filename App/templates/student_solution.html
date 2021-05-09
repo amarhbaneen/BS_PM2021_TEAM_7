@@ -25,21 +25,9 @@
 
                 <h1 class="display-4">New Solution </h1>
 
-
                  <form action="" method="post" autocomplete="off">
                     {% csrf_token %}
-
-                     <p style=text-align:center>
-                        Solution Content :
-                     </p>
-
-                     </div>
-                     <div class="row">
-
-                             {{form.homeWorkContent}}
-                     </div>
-
-
+                     {{ form.as_p }}
                             <button type="submit" class="btn btn-outline-success " style="position: center" id="submit_btn"><i class="fas fa-save"></i> submit</button>
                      </form>
 
