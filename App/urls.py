@@ -40,5 +40,6 @@ urlpatterns = [
     path('update/<int:id>',views.user_form_edit,name="update_user_info"),
     path('delete/<int:id>',views.delete_user,name="delete_user"),
     path('create_user/',views.create_user,name="create_user"),
-    path('show_details/<int:id>',views.showUser,name="show_details")
+    path('show_details/<int:id>',views.showUser,name="show_details"),
+    path('createSolution/<int:id>',views.createSolution,name="createSolution")
 ]

@@ -117,19 +117,6 @@ def Student_Signup(request):
         return redirect('login')
 
 
-def Solution_form(request):
-    form = SolutionForm(request.POST or None)
-    if form.is_valid():
-        if request.user.is_authenticated:
-            student_username = request.user.username
-        form.student=student_username
-        form.save()
-    context = {
-        'form': form
-    }
-    return render(request, 'student_solution.html', context)
-
-
 def logoutUser(request):
     logout(request)
     return redirect('login')
@@ -328,6 +315,42 @@ def showSingleHomeWork(request, id):
     form = HomeworkForm(instance=homework)
     context = {'homework': homework}
     return render(request, "student_templates/showSingleHomeWork.html", context)
+
+
+def Solution_form(request):
+    form = SolutionForm(request.POST or None)
+    if form.is_valid():
+        if request.user.is_authenticated:
+            student_username = request.user.username
+        form.student = student_username
+        form.save()
+    context = {
+        'form': form
+    }
+    return render(request, 'student_solution.html', context)
+
+
+def createSolution(request,id):
+    SolutionFormSet = inlineformset_factory(Student, StudentSolution, fields=('solutionContent',), extra=1,can_delete=False)
+    student = Student.objects.get(user=request.user)
+    homeWork=HomeWork.objects.get(pk=id)
+    teacher=student.teacher
+    initial={'homeWork':homeWork,'teacher':teacher,'student':student}
+
+    formset = SolutionFormSet(queryset=StudentSolution.objects.none(), instance=student)
+    # form = OrderForm(initial={'customer':customer})
+    if request.method == 'POST':
+        formset = SolutionFormSet(request.POST, instance=student)
+        if formset.is_valid():
+            sol= formset.save(commit=False)
+            sol[0].homeWork=homeWork
+            sol[0].teacher=teacher
+            sol[0].save()
+            return redirect('student_dashboard')
+
+
+    context = {'form': formset}
+    return render(request, 'student_templates/createSolution.html', context)
 
 
 # ------------------------------------- bug Views ----------------------------------#
