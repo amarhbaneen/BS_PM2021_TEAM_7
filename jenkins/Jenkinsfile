@@ -9,9 +9,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'python manage.py runserver'
+
                 sh 'python manage.py test'
-                sh 'python manage.py exit()'
+
             }
 
         }
