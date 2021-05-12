@@ -6,7 +6,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect,get_object_or_404
 from django import template
 from django.contrib.auth.models import Group,User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from App.forms import *
 from App.models import *
@@ -150,6 +150,9 @@ def logoutUser(request):
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
 def teacher_dashboard(request):
+
+
+
     # created Dashboard for the Teacher that shown for the teacher after loging in
 
     context = {'homework_list': HomeWork.objects.all(), 'message_list': TeacherMessage.objects.last(),
@@ -448,9 +451,9 @@ def user_list(request):
 
 def user_form_edit(request,id):
         user =User.objects.get(pk=id)
-        form = addUserForm(instance=user)
+        form = UserCreationForm(instance=user)
         if request.method == 'POST':
-            form = addUserForm(request.POST, instance=form)
+            form = UserCreationForm(request.POST, instance=form)
             if form.is_valid():
                 form.save()
 
@@ -508,6 +511,29 @@ def showUser(request,id):
 #         return render(request,'user_list.html',{'user_filter':user_filter})
 #     else:
 #         return render(request,'user_list.html',{})
+
+
+
+
+def addStudent(request):
+    form = UserCreationForm()
+
+    teachers = ((teacher.user)
+               for teacher in Teacher.objects.all())
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        teacherusername = request.POST.get('teacher')
+        teacheruser=User.objects.get(username=teacherusername)
+        teacher=Teacher.objects.get(user=teacheruser)
+        if form.is_valid():
+            user=form.save()
+            Student.objects.create(user=user,teacher=teacher)
+
+    context = {'form': form,'teachers':teachers,}
+
+    return render(request, 'admin_templates/addStudent.html', context)
+
 
 
 

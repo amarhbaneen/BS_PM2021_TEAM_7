@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="col-md-9">
+		<div class="card card-body">
+
+			<form method="POST" action="" >
+                {% csrf_token %}
+				{{form.as_p}}
+            <div class="row">
+                <select name="teacher">
+
+
+   <option disabled="true" selected> choose</option>
+    {% for i in teachers %}
+    <option>{{ i }}</option>
+{% endfor %}
+    </select>
+            </div>
+
+
+
+			<input class="btn btn-outline-primary" type="submit" name="Update ">
+			</form>
+		</div>
+	</div>
+
+{% endblock %}
