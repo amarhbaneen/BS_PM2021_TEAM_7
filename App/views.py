@@ -125,6 +125,9 @@ def logoutUser(request):
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
 def teacher_dashboard(request):
+
+
+
     # created Dashboard for the Teacher that shown for the teacher after loging in
 
     context = {'homework_list': HomeWork.objects.all(), 'message_list': TeacherMessage.objects.last(),
@@ -500,3 +503,29 @@ def showUser(request, id):
 #         return render(request,'user_list.html',{'user_filter':user_filter})
 #     else:
 #         return render(request,'user_list.html',{})
+
+
+
+
+def addStudent(request):
+    form = UserCreationForm()
+
+    teachers = ((teacher.user)
+               for teacher in Teacher.objects.all())
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        teacherusername = request.POST.get('teacher')
+        teacheruser=User.objects.get(username=teacherusername)
+        teacher=Teacher.objects.get(user=teacheruser)
+        if form.is_valid():
+            user=form.save()
+            Student.objects.create(user=user,teacher=teacher)
+
+    context = {'form': form,'teachers':teachers,}
+
+    return render(request, 'admin_templates/addStudent.html', context)
+
+
+
+

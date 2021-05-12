@@ -33,6 +33,7 @@ urlpatterns = [
     path('myHomeWorks',views.showStudentHomeworks,name="myHomeWorks"),
     path('showHomeWork/<int:id>',views.showSingleHomeWork,name="showHomeWork"),
     path('addGrade/<int:id>', views.addGrade, name="addGrade"),
+    path('addStudent',views.addStudent,name="addStudent"),
 
 
 
