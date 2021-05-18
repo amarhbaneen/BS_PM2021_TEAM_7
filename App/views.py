@@ -186,7 +186,7 @@ def showSolutions(request):
 
 # ------------------------ Grades Views ---------------------
 def addGrade(request, id):
-    GradeFormSet = inlineformset_factory(StudentSolution, Grade, fields=('grade', 'teacherComment'), extra=0)
+    GradeFormSet = inlineformset_factory(StudentSolution, Grade, fields=('grade', 'teacherComment'), extra=1)
     solution = StudentSolution.objects.get(pk=id)
     formset = GradeFormSet(instance=solution)
     # form = OrderForm(initial={'customer':customer})
@@ -354,6 +354,15 @@ def createSolution(request,id):
 
     context = {'form': formset}
     return render(request, 'student_templates/createSolution.html', context)
+
+def myGrades(request):
+    student = Student.objects.get(user=request.user)
+    solutions=StudentSolution.objects.filter(student=student)
+
+    grades = Grade.objects.filter(solution__in=solutions).all()
+    context = {'grades': grades}
+    return render(request, 'student_templates/studentGrades.html', context)
+
 
 
 # ------------------------------------- bug Views ----------------------------------#

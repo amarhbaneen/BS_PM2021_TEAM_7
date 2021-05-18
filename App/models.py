@@ -53,7 +53,7 @@ class StudentSolution(models.Model):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return "student :" + self.student.__str__() + "   Solution " + self.solutionContent
+        return "student :" + self.student.__str__() + "   Solution " + self.solutionContent + "Home work" + self.homeWork.__str__()
 
 
 class Grade(models.Model):
@@ -62,7 +62,7 @@ class Grade(models.Model):
     teacherComment = RichTextField(blank=True)
 
     def __str__(self):
-        return self.solution.student.__str__() + self.solution.homeWork.__str__()
+        return  self.solution.__str__()
 
 
 class Studies(models.Model):

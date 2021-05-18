@@ -20,23 +20,24 @@
 		<div class="row">
 			<div class="col-md">
 				<div class="card card-body">
-					<h4>My Students solutions</h4>
+					<h4>My Grades</h4>
 				</div>
 				<div class="card card-body">
 					<table class="table">
 						<tr>
-					<th>Student name</th>
+
 
                     <th>Homework Title</th>
-					<th>Add Grades</th>
+                    <th>Grade</th>
+					<th> details</th>
 
 				</tr>
 
                     {% for  i in solutions %}
                     <tr>
-              <td> {{ i.student }}</td>
+              <td> {{ i.h }}</td>
                         <td> {{ i.homeWork }}</td>
-                     <td>  <a class="btn btn-outline-success" href={% url 'addGrade' i.id %} role="button">Add Grade</a></td>
+                     <td>  <a class="btn btn-outline-success" href={% url 'addGrade' i.id %} role="button">Show details</a></td>
 
 
 
