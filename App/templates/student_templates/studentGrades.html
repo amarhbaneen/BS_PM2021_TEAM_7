@@ -1,0 +1,40 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+		<br>
+
+		<div class="row">
+			<div class="col-md">
+				<div class="card card-body">
+					<h4>My Grades</h4>
+				</div>
+				<div class="card card-body">
+					<table class="table">
+						<tr>
+
+
+                    <th>Homework Title</th>
+                            <th>Grade</th>
+					<th>Details</th>
+
+				</tr>
+
+                    {% for  i in grades %}
+                    <tr>
+              <td> {{ i.solution.homeWork.homeWorkTitle }}</td>
+                        <td> {{ i.grade }}</td>
+                     <td>  <a class="btn btn-outline-success" href="" role="button">Show Details</a></td>
+
+
+
+                    </tr>
+                {% endfor %}
+						
+					</table>
+				</div>
+			</div>
+			
+		</div>
+
+{% endblock content %}

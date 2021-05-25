@@ -34,6 +34,7 @@ urlpatterns = [
     path('showHomeWork/<int:id>',views.showSingleHomeWork,name="showHomeWork"),
     path('addGrade/<int:id>', views.addGrade, name="addGrade"),
     path('addStudent',views.addStudent,name="addStudent"),
+    path('myGrades',views.myGrades,name="myGrades"),
 
 
 
