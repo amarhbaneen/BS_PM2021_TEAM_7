@@ -29,12 +29,12 @@ pipeline {
         }
         stage(' unit test coverage') {
 			steps {
-				dir("App") {
+
 					withEnv(["HOME=${env.WORKSPACE}"]) {
 						sh 'python -m coverage xml -o ./tests/coverage.xml'
 						sh 'python -m coverage report --fail-under=80'
 					}
-				}
+
 			}
 		}
 
