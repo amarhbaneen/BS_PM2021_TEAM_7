@@ -50,7 +50,7 @@ pipeline {
             }
 	}
    
-    }
+    
 	post {
 		failure{
 			mail to: 'amaralzana@gmail.com',
