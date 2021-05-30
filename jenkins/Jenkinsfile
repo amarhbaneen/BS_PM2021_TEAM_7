@@ -1,7 +1,7 @@
 pipeline {
     agent {
 		docker {
-			image 'amarhabneen/new_image'
+			image 'python:3.6.10-buster'
 		}
 	}
 	triggers {
@@ -19,41 +19,68 @@ pipeline {
 		}
         stage('Application Setup') {
             steps {
-
+				withEnv(["HOME=${env.WORKSPACE}"]) {
+					dir("Devops") {
 						sh 'python -m pip install --upgrade pip --user'
 						sh 'python -m pip install -r requirements.txt'
+					}
+					dir("B7FunDjango") {
 						sh 'python manage.py makemigrations'
 						sh 'python manage.py migrate'
-
+					}
 				}
             }
         }
 		stage('Run Unit Tests') {
             steps {
-
-						sh "python -m coverage run manage.py test "
-
+				dir("B7FunDjango") {
+					withEnv(["HOME=${env.WORKSPACE}"]) {
+						sh "python -m coverage run manage.py test --tag=unit-test"
+					}
 				}
 			}
         }
 
 		stage('Run Integration Tests') {
             steps {
-
-
-						sh "python -m coverage run -a manage.py test "
-
-
+				dir("B7FunDjango") {
+					withEnv(["HOME=${env.WORKSPACE}"]) {
+						sh "python -m coverage run -a manage.py test --tag=integration-test"
+					}
+				}
 			}
         }
 
+		stage('Metric 1 - unit test coverage') {
+			steps {
+				dir("B7FunDjango") {
+					withEnv(["HOME=${env.WORKSPACE}"]) {
+						sh 'python -m coverage xml -o ./test_reports/coverage.xml'
+						sh 'python -m coverage report --fail-under=80'
+					}
+				}
+			}
+		}
+
+		stage('Metric 2 - pylint python code convention') {
+			steps {
+				dir("B7FunDjango") {
+					withEnv(["HOME=${env.WORKSPACE}"]) {
+						sh 'python -m pylint B7FunDjango accounts feed postsFeed Profile reviews chat reports reviews'
+					}
+				}
+			}
+		}
 
 		stage('Metric 3 - Test Trend Chart') {
 			steps {
-
+				dir("B7FunDjango") {
+					withEnv(["HOME=${env.WORKSPACE}"]) {
 						sh "python -m coverage run -a manage.py test"
-
-					junit allowEmptyResults: true, testResults: 'unittest.xml'
+					}
+				}
+				dir("B7FunDjango") {
+					junit allowEmptyResults: true, testResults: 'test_reports/unittest.xml'
 				}
 			}
 		}
@@ -61,15 +88,17 @@ pipeline {
     }
 	post {
 		failure{
-			mail to: 'amaralzana@gmail.com',
+
 			subject: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
 			body: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
 		}
 		success{
-			mail to: 'amaralzana@gmail.com',
+
 			subject: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
 			body: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
 		}
-
+		always{
+			deleteDir()
+		}
 	}
 }
