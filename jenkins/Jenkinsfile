@@ -30,8 +30,20 @@ pipeline {
                 sh 'python manage.py test'
 		      }
             }
+	 
 
         }
+	stage('mkr') {
+            agent {
+                docker {
+                    image 'amarhabneen/bm_team7'
+                }
+            }
+            steps {
+		      withEnv(["HOME=${env.WORKSPACE}"]) {
+              			 junit allowEmptyResults: true, testResults: 'test_reports/unittest.xml'
+		      }
+            }
 
     }
 }
