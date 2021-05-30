@@ -3,7 +3,19 @@ pipeline {
     agent none
     stages {
 
-        stage('Test') {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'amarhabneen/bm_team7'
+                }
+            }
+            steps {
+                sh 'python -m pip install --upgrade pip --user'
+						    sh 'python -m pip install -r requirements.txt'
+            }
+
+        }
+      stage('Test') {
             agent {
                 docker {
                     image 'amarhabneen/bm_team7'
