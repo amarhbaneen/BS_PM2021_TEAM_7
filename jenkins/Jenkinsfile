@@ -41,10 +41,24 @@ pipeline {
             }
             steps {
 		      withEnv(["HOME=${env.WORKSPACE}"]) {
-              			 junit allowEmptyResults: true, testResults: 'test_reports/unittest.xml'
+              			 junit allowEmptyResults: true, testResults: 'unittest.xml'
 		      }
             }
 	}
-    
+    post {
+		failure{
+			mail to: 'B7FunService@gmail.com',
+			subject: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
+			body: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
+		}
+		success{
+			mail to: 'B7FunService@gmail.com',
+			subject: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
+			body: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
+		}
+		always{
+			deleteDir()
+		}
+    }
     }
 }
