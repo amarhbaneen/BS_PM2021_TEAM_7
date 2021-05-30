@@ -45,6 +45,11 @@ pipeline {
 	    
 	    
 		stage(' Test Trend Chart') {
+			agent {
+                docker {
+                    image 'amarhabneen/bm_team7'
+                }
+            }
 			steps {
 				
 				
