@@ -36,8 +36,7 @@ urlpatterns = [
     path('addGrade/<int:id>', views.addGrade, name="addGrade"),
     path('addStudent',views.addStudent,name="addStudent"),
     path('myGrades',views.myGrades,name="myGrades"),
-
-
+    path('myTeacherComment/<int:id>', views.myTeacherComment, name="myTeacherComment"),
 
     path('user_list/',views.user_list,name="user_list"),
     path('update/<int:id>',views.user_form_edit,name="update_user_info"),
