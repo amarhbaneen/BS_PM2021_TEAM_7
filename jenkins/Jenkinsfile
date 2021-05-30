@@ -1,20 +1,75 @@
 pipeline {
-    agent none
+    agent {
+		docker {
+			image 'amarhabneen/new_image'
+		}
+	}
+	triggers {
+        githubPush()
+    }
+	options {
+		skipDefaultCheckout(true)
+        timeout(time: 60, unit: 'MINUTES')
+    }
     stages {
-
-        stage('Test') {
-            agent {
-                docker {
-                    image 'amarhabneen/new_image'
-                }
-            }
+		stage('Repository Fetch') {
+			steps {
+				checkout scm
+			}
+		}
+        stage('Application Setup') {
             steps {
 
-                sh 'python manage.py test'
+						sh 'python -m pip install --upgrade pip --user'
+						sh 'python -m pip install -r requirements.txt'
+						sh 'python manage.py makemigrations'
+						sh 'python manage.py migrate'
 
+				}
             }
+        }
+		stage('Run Unit Tests') {
+            steps {
 
+						sh "python -m coverage run manage.py test "
+
+				}
+			}
         }
 
+		stage('Run Integration Tests') {
+            steps {
+
+
+						sh "python -m coverage run -a manage.py test "
+
+
+			}
+        }
+
+
+		stage('Metric 3 - Test Trend Chart') {
+			steps {
+
+						sh "python -m coverage run -a manage.py test"
+
+					junit allowEmptyResults: true, testResults: 'unittest.xml'
+				}
+			}
+		}
+
     }
+	post {
+		failure{
+			mail to: 'amaralzana@gmail.com',
+			subject: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
+			body: "Failed: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
+		}
+		success{
+			mail to: 'amaralzana@gmail.com',
+			subject: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']",
+			body: "SUCCESS: Job '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']: Check console output at '${env.BUILD_URL}' '${env.JOB_NAME}' ['${env.BUILD_NUMBER}']"
+		}
+
+	}
 }
