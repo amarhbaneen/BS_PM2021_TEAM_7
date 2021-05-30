@@ -38,4 +38,4 @@ jobs:
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: ./manage.py test 
+          command: python manage.py test
