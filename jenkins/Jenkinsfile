@@ -42,6 +42,16 @@ pipeline {
 
 			}
 		}
+	    
+	    
+		stage(' Test Trend Chart') {
+			steps {
+				
+				
+					junit allowEmptyResults: true, testResults: 'unittest.xml'
+				
+			}
+		}
 
       }
 
