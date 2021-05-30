@@ -10,8 +10,8 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m pip install --upgrade pip --user'
-						    sh 'python -m pip install -r requirements.txt'
+                
+		sh 'python -m pip install -r requirements.txt'
             }
 
         }
