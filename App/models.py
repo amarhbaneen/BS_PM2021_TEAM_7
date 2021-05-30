@@ -59,7 +59,7 @@ class StudentSolution(models.Model):
 class Grade(models.Model):
     solution = models.ForeignKey(StudentSolution, on_delete=models.CASCADE, null=True)
     grade = models.FloatField()
-    teacherComment = RichTextField(blank=True)
+    teacherComment = RichTextField()
 
     def __str__(self):
         return  self.solution.__str__()

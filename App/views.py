@@ -363,6 +363,13 @@ def myGrades(request):
     context = {'grades': grades}
     return render(request, 'student_templates/studentGrades.html', context)
 
+def myTeacherComment(request,id):
+    grade=Grade.objects.get(pk=id)
+
+    context = {'grade': grade}
+    return render(request,'student_templates/myteacherComment.html',context)
+
+
 
 
 # ------------------------------------- bug Views ----------------------------------#
