@@ -43,7 +43,7 @@ pipeline {
 		      withEnv(["HOME=${env.WORKSPACE}"]) {
               			 	 dir('/test')
                       {
-                     junit '**/test_result.xml'
+                     junit allowEmptyResults: true, results: '**/test_result.xml'
                          }
 		      }
             }
