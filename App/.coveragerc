@@ -1,0 +1,10 @@
+[run]
+source = .
+omit =
+    *settings.py*
+    *wsgi.py*
+    *manage.py*
+    *routing.py*
+    *routing.py*
+    *admin.py*
+    *consumers.py*
