@@ -42,12 +42,14 @@ pipeline {
             steps {
 		      withEnv(["HOME=${env.WORKSPACE}"]) {
               			 	 dir('/test')
-                      {
-                     junit allowEmptyResults: true, results: '**/test_result.xml'
-                         }
+                     			 {
+                     				junit allowEmptyResults: true, results: '**/test_result.xml'
+                        		 }
 		      }
+		     
             }
 	}
+   
     }
 	post {
 		failure{
