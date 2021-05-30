@@ -41,7 +41,7 @@ pipeline {
             }
             steps {
 		      withEnv(["HOME=${env.WORKSPACE}"]) {
-              			 junit allowEmptyResults: true, testResults: 'unittest.xml'
+              			 junit  testResults: 'tests/unittest.xml'
 		      }
             }
 	}
