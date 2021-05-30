@@ -11,10 +11,10 @@ pipeline {
             }
             steps {
 		    withEnv(["HOME=${env.WORKSPACE}"]) {
-					dir("Devops") {
+					
                 sh 'python3 -m venv env'
 		sh 'pip install -r requirements.txt'
-					}
+					
 		    }
             }
 
