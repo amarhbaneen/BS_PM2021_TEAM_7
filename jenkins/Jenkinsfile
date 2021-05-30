@@ -10,12 +10,12 @@ pipeline {
                 }
             }
             steps {
-		    withEnv(["HOME=${env.WORKSPACE}"]) {
+		            withEnv(["HOME=${env.WORKSPACE}"]) {
 					
                
-		sh 'pip install -r requirements.txt'
+		                    sh 'pip install -r requirements.txt'
 					
-		    }
+		    
             }
 
         }
@@ -33,7 +33,8 @@ pipeline {
 	 
 
         }
-	stage('mkr') {
+	stage('mkr') 
+	    {
             agent {
                 docker {
                     image 'amarhabneen/bm_team7'
@@ -48,9 +49,10 @@ pipeline {
 		      }
 		     
             }
-	}
-   
-    
+            
+	    }
+   }
+
 	post {
 		failure{
 			mail to: 'amaralzana@gmail.com',
