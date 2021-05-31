@@ -44,5 +44,8 @@ urlpatterns = [
     path('delete/<int:id>',views.delete_user,name="delete_user"),
     path('create_user/',views.create_user,name="create_user"),
     path('show_details/<int:id>',views.showUser,name="show_details"),
-    path('createSolution/<int:id>',views.createSolution,name="createSolution")
+    path('createSolution/<int:id>',views.createSolution,name="createSolution"),
+    path('editSolution/<int:id>',views.editSolution,name="editSolution")
+
+
 ]

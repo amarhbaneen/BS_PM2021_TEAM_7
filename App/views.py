@@ -58,7 +58,6 @@ def login(request):
 
 def Teacher_Signup(request):
     if request.method == 'POST':
-        ID = request.POST['ID']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         username = request.POST['username']
@@ -73,7 +72,7 @@ def Teacher_Signup(request):
                 # Teacher_ID = User.objects.get(pk=request.user.id)
                 # if Teacher_ID==ID:
                 user = User.objects.create_user(username=username, email=email, password=password1,
-                                                last_name=last_name, first_name=first_name, ID=ID)
+                                                last_name=last_name, first_name=first_name)
                 user.save()
                 Teacher.objects.create(user=user)
                 my_group = Group.objects.get(name='teachers')
@@ -82,17 +81,15 @@ def Teacher_Signup(request):
                 return redirect('login')
         else:
             messages.info(request, 'passwords doesnt mach')
-            return redirect('teacher_register')
+            return redirect('teacher_templates/teacher_register')
     else:
         return render(request, 'teacher_templates/teacher_register.html')
-
-
 
 
 def Student_Signup(request):
     teachers = ((teacher.user)
                 for teacher in Teacher.objects.all())
-    context={'teachers':teachers}
+    context = {'teachers': teachers}
 
     if request.method == 'POST':
         first_name = request.POST['first_name']
@@ -113,7 +110,7 @@ def Student_Signup(request):
                                                 last_name=last_name,
                                                 first_name=first_name)
                 user.save()
-                Student.objects.create(user=user,teacher=teacher)
+                Student.objects.create(user=user, teacher=teacher)
                 my_group = Group.objects.get(name='students')
                 my_group.user_set.add(user)
                 print("user is created")
@@ -122,7 +119,49 @@ def Student_Signup(request):
             messages.info(request, 'passwords doesnt mach')
             return redirect('student_templates/student_register')
     else:
-        return render(request, 'student_templates/student_register.html',context)
+        return render(request, 'student_templates/student_register.html', context)
+
+
+def createSolution(request, id):
+    SolutionFormSet = inlineformset_factory(Student, StudentSolution, fields=('solutionContent',), extra=1,
+                                            can_delete=False)
+    student = Student.objects.get(user=request.user)
+    homeWork = HomeWork.objects.get(pk=id)
+    teacher = student.teacher
+    initial = {'homeWork': homeWork, 'teacher': teacher, 'student': student}
+
+    formset = SolutionFormSet(queryset=StudentSolution.objects.none(), instance=student)
+    if request.method == 'POST':
+        formset = SolutionFormSet(request.POST, instance=student)
+        if formset.is_valid():
+            sol = formset.save(commit=False)
+            sol[0].homeWork = homeWork
+            sol[0].teacher = teacher
+            sol[0].save()
+            return redirect('student_dashboard')
+    context = {'form': formset}
+    return render(request, 'student_templates/createSolution.html', context)
+
+
+def editSolution(request, id):
+    if request.method == "GET":
+        if id == 0:
+            form = SolutionForm()
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+            form = SolutionForm(instance=solution)
+        return render(request, "student_templates/EditSolution.html", {'form': form})
+
+    else:
+        if id == 0:
+            form = SolutionForm(request.POST)
+
+        else:
+            solution = StudentSolution.objects.get(pk=id)
+            form = SolutionForm(request.POST, instance=solution)
+        if form.is_valid():
+            form.save()
+        return redirect('student_dashboard')
 
 
 def logoutUser(request):
@@ -133,9 +172,6 @@ def logoutUser(request):
 # -------------------------------------- Teacher Views ----------------------------------#
 # @author Amar Alsana
 def teacher_dashboard(request):
-
-
-
     # created Dashboard for the Teacher that shown for the teacher after loging in
 
     context = {'homework_list': HomeWork.objects.all(), 'message_list': TeacherMessage.objects.last(),
@@ -156,14 +192,12 @@ def teacher_message_form(request, id=0):
             form = TeacherMessageForm()
         else:
             message = TeacherMessage.objects.get(pk=id)
-
             form = TeacherMessageForm(instance=message)
 
         return render(request, "teacher_templates/message_form.html", {'form': form})
     else:
         if id == 0:
             form = TeacherMessageForm(request.POST)
-
         else:
             message = TeacherMessage.objects.get(pk=id)
             form = TeacherMessageForm(request.POST, instance=message)
@@ -223,7 +257,6 @@ def homework_form(request, id=0):
 
         else:
             homework = HomeWork.objects.get(pk=id)
-
             form = HomeworkForm(instance=homework)
 
         return render(request, "homework_templates/homework_form.html", {'form': form})
@@ -341,36 +374,13 @@ def Solution_form(request):
     return render(request, 'student_solution.html', context)
 
 
-def createSolution(request,id):
-    SolutionFormSet = inlineformset_factory(Student, StudentSolution, fields=('solutionContent',), extra=1,can_delete=False)
-    student = Student.objects.get(user=request.user)
-    homeWork=HomeWork.objects.get(pk=id)
-    teacher=student.teacher
-    initial={'homeWork':homeWork,'teacher':teacher,'student':student}
-
-    formset = SolutionFormSet(queryset=StudentSolution.objects.none(), instance=student)
-    # form = OrderForm(initial={'customer':customer})
-    if request.method == 'POST':
-        formset = SolutionFormSet(request.POST, instance=student)
-        if formset.is_valid():
-            sol= formset.save(commit=False)
-            sol[0].homeWork=homeWork
-            sol[0].teacher=teacher
-            sol[0].save()
-            return redirect('student_dashboard')
-
-
-    context = {'form': formset}
-    return render(request, 'student_templates/createSolution.html', context)
-
 def myGrades(request):
     student = Student.objects.get(user=request.user)
-    solutions=StudentSolution.objects.filter(student=student)
+    solutions = StudentSolution.objects.filter(student=student)
 
     grades = Grade.objects.filter(solution__in=solutions).all()
     context = {'grades': grades}
     return render(request, 'student_templates/studentGrades.html', context)
-
 
 
 # ------------------------------------- bug Views ----------------------------------#
@@ -512,6 +522,7 @@ def showUser(request, id):
     context = {'user': user}
     return render(request, 'show_details.html', context)
 
+
 # def search(request):
 #     if request.method=='POST':
 #         searched=request.POST['searched']
@@ -522,27 +533,21 @@ def showUser(request, id):
 #         return render(request,'user_list.html',{})
 
 
-
-
 def addStudent(request):
     form = UserCreationForm()
 
     teachers = ((teacher.user)
-               for teacher in Teacher.objects.all())
+                for teacher in Teacher.objects.all())
 
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         teacherusername = request.POST.get('teacher')
-        teacheruser=User.objects.get(username=teacherusername)
-        teacher=Teacher.objects.get(user=teacheruser)
+        teacheruser = User.objects.get(username=teacherusername)
+        teacher = Teacher.objects.get(user=teacheruser)
         if form.is_valid():
-            user=form.save()
-            Student.objects.create(user=user,teacher=teacher)
+            user = form.save()
+            Student.objects.create(user=user, teacher=teacher)
 
-    context = {'form': form,'teachers':teachers,}
+    context = {'form': form, 'teachers': teachers, }
 
     return render(request, 'admin_templates/addStudent.html', context)
-
-
-
-
