@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django import template
 from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect
+from django.views.generic import UpdateView
 
 from App.forms import *
 from App.models import *
@@ -466,28 +467,18 @@ def user_list(request):
     return render(request, "user_list.html", context)
 
 
+
+
 def user_form_edit(request, id):
     user = User.objects.get(pk=id)
-    form = addUserForm(instance=user)
+    form = UserCreationForm(instance=user)
     if request.method == 'POST':
-        form = addUserForm(request.POST, instance=form)
+        form = UserCreationForm(request.POST, instance=form)
         if form.is_valid():
             form.save()
-
     context = {'form': form}
     return render(request, 'user_form_info.html', context)
 
-
-# return render(request, 'profile.html', context)
-
-# instance=get_object_or_404(User,id=id)
-# form=addUserForm(instance=instance)
-# if request.method=='POST':
-#     form=addUserForm(request.POST,instance=instance)
-#     if form.is_valid():
-#         form.save()
-#         return redirect('user_list')
-# return render(request,'create_user.html',{'form':form})
 
 
 def delete_user(request, id):
@@ -497,57 +488,51 @@ def delete_user(request, id):
 
 
 def create_user(request):
-    form = addUserForm()
+    form = UserCreationForm()
     if request.method == 'POST':
-        form = addUserForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             curr_user = form.save()
-            if form.clean_user_type() in ('Student', 'student'):
-                user = User.objects.get(username=form.clean_chose_teacher())
-                teacher = Teacher.objects.get(user=user)
-                Student.objects.create(user=curr_user, teacher=teacher)
-
-            elif form.clean_user_type() in ('Teacher', 'teacher'):
-                Teacher.objects.create(user=curr_user)
-                # Teacher.objects.create(user_id=curr_user)
+            Teacher.objects.create(user=curr_user)
             return redirect('user_list')
     return render(request, "create_user.html", {"form": form})
-
 
 def showUser(request, id):
     user = User.objects.get(pk=id)
     context = {'user': user}
     return render(request, 'show_details.html', context)
 
-# def search(request):
-#     if request.method=='POST':
-#         searched=request.POST['searched']
-#         user_list=User.objects.all()
-#         user_filter=user_list.filter(username=searched)
-#         return render(request,'user_list.html',{'user_filter':user_filter})
-#     else:
-#         return render(request,'user_list.html',{})
 
 
+def addTeacher(request):
+    form = UserCreationForm()
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            curr_user = form.save()
+            Teacher.objects.create(user=curr_user)
+            my_group = Group.objects.get(name='teachers')
+            my_group.user_set.add(curr_user)
+            return redirect('user_list')
+    return render(request, "admin_templates/addTeacher.html", {"form": form})
 
 
 def addStudent(request):
     form = UserCreationForm()
-
     teachers = ((teacher.user)
                for teacher in Teacher.objects.all())
-
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         teacherusername = request.POST.get('teacher')
-        teacheruser=User.objects.get(username=teacherusername)
-        teacher=Teacher.objects.get(user=teacheruser)
+        teacheruser = User.objects.get(username=teacherusername)
+        teacher = Teacher.objects.get(user=teacheruser)
         if form.is_valid():
-            user=form.save()
-            Student.objects.create(user=user,teacher=teacher)
-
-    context = {'form': form,'teachers':teachers,}
-
+            user = form.save()
+            Student.objects.create(user=user, teacher=teacher)
+            my_group = Group.objects.get(name='students')
+            my_group.user_set.add(user)
+            return redirect('user_list')
+    context = {'form': form,'teachers':teachers}
     return render(request, 'admin_templates/addStudent.html', context)
 
 

@@ -35,6 +35,7 @@ urlpatterns = [
     path('showHomeWork/<int:id>',views.showSingleHomeWork,name="showHomeWork"),
     path('addGrade/<int:id>', views.addGrade, name="addGrade"),
     path('addStudent',views.addStudent,name="addStudent"),
+    path('addTeacher',views.addTeacher,name="addTeacher"),
     path('myGrades',views.myGrades,name="myGrades"),
     path('myTeacherComment/<int:id>', views.myTeacherComment, name="myTeacherComment"),
 
@@ -43,5 +44,6 @@ urlpatterns = [
     path('delete/<int:id>',views.delete_user,name="delete_user"),
     path('create_user/',views.create_user,name="create_user"),
     path('show_details/<int:id>',views.showUser,name="show_details"),
-    path('createSolution/<int:id>',views.createSolution,name="createSolution")
+    path('createSolution/<int:id>',views.createSolution,name="createSolution"),
+    #path('update_user/<int:id>',views.update_form,name="update_user_form"),
 ]
