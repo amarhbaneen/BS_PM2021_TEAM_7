@@ -46,4 +46,7 @@ urlpatterns = [
     path('show_details/<int:id>',views.showUser,name="show_details"),
     path('createSolution/<int:id>',views.createSolution,name="createSolution"),
     #path('update_user/<int:id>',views.update_form,name="update_user_form"),
+    path('editSolution/<int:id>',views.editSolution,name="editSolution")
+
+
 ]

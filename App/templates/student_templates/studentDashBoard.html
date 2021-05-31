@@ -38,7 +38,7 @@
                      <td>  <a class="btn btn-outline-success" href="{% url 'createSolution' i.pk %}" role="button">Add</a></td>
 
 
-                     <td>  <a class="btn btn-warning" href="#" role="button">Edit</a></td>
+                     <td>  <a class="btn btn-warning" href="{% url 'editSolution' i.pk %}" role="button">Edit</a></td>
                     </tr>
                 {% endfor %}
 
