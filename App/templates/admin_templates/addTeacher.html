@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3> Create User</h3>
+    <h3> Create Teacher</h3>
     <div class="container">
-        <form action="{% url 'create_user' %}" method="post">
+        <form action="{% url 'addTeacher' %}" method="post">
             {% csrf_token %}
         {{ form.as_ul}}
         <div class="row">

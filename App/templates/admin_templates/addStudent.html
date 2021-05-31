@@ -2,28 +2,32 @@
 
 
 {% block content %}
-<div class="col-md-9">
-		<div class="card card-body">
+<h3> Create Student</h3>
+    <div class="container">
+        <form action="{% url 'addStudent' %}" method="post">
+            {% csrf_token %}
+        {{ form.as_ul}}
+                <label for="Choose teacher">Choose a Teacher:</label>
+                <select name="teacher" required>
+   <option disabled="true" selected></option>
 
-			<form method="POST" action="" >
-                {% csrf_token %}
-				{{form.as_p}}
-            <div class="row">
-                <select name="teacher">
-
-
-   <option disabled="true" selected> choose</option>
     {% for i in teachers %}
     <option>{{ i }}</option>
 {% endfor %}
     </select>
-            </div>
+        <div class="row">
+                      <form >
+                        <div class="col-sm-3">
+                          <input type="submit" value="Add user" class="btn btn-success">
+                        </div>
+                        <div class="col-sm-3">
+                          <a href="{% url 'user_list' %}" class="btn btn-secondary ">Back to list</a>
+                             <i class="fas fa-stream"></i>
+                        </div>
+                      </form>
+                    </div>
+        </form>
+    </div>
 
-
-
-			<input class="btn btn-outline-primary" type="submit" name="Update ">
-			</form>
-		</div>
-	</div>
 
 {% endblock %}
