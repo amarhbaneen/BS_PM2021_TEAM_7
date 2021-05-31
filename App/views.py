@@ -465,15 +465,13 @@ def study_delete(request, id):
 
 
 def user_list(request):
-    context = User.objects.all()
-    just_user = []
-    for con in context:
-        if not con.is_superuser:
-            just_user.append(con)
 
     myFilter = userFilter(request.GET, queryset=User.objects.all())
+
     user_list = myFilter.qs
+
     context = {'user_list': user_list, 'myFilter': myFilter}
+
     return render(request, "user_list.html", context)
 
 
