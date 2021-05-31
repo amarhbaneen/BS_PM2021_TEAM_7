@@ -1,12 +1,19 @@
 from django.contrib import auth
+from django.contrib import auth
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.db.models import Q
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django import template
 from django.contrib.auth.models import Group, User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, BadHeaderError, HttpResponse
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.views.generic import UpdateView
 
 from App.forms import *
@@ -37,24 +44,33 @@ def profile(request):
 
 
 def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username, password=password)
-        if user is not None and user.groups.filter(name='admins').exists():
-            auth.login(request, user)
-            return redirect('dashboard')
-        elif user is not None and user.groups.filter(name='students').exists():
-            auth.login(request, user)
-            return redirect('student_dashboard')
-        elif user is not None and user.groups.filter(name='teachers').exists():
-            auth.login(request, user)
-            return redirect('teacher')
+    if request.user.is_authenticated == False:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
+            user = auth.authenticate(username=username, password=password)
+            if user is not None and user.groups.filter(name='admins').exists():
+                auth.login(request, user)
+                return redirect('dashboard')
+            elif user is not None and user.groups.filter(name='students').exists():
+                auth.login(request, user)
+                return redirect('student_dashboard')
+            elif user is not None and user.groups.filter(name='teachers').exists():
+                auth.login(request, user)
+                return redirect('teacher')
+            else:
+                messages.info(request, 'error')
+                return redirect('login')
         else:
-            messages.info(request, 'error')
-            return redirect('login')
+
+            return render(request, 'login.html')
     else:
-        return render(request, 'login.html')
+        if request.user.groups.filter(name='admins'):
+            return redirect('dashboard')
+        if request.user.groups.filter(name='students'):
+            return redirect('student_dashboard')
+        if request.user.groups.filter(name='teachers'):
+            return redirect('teacher')
 
 
 def Teacher_Signup(request):
@@ -383,12 +399,12 @@ def myGrades(request):
     context = {'grades': grades}
     return render(request, 'student_templates/studentGrades.html', context)
 
-def myTeacherComment(request,id):
-    grade=Grade.objects.get(pk=id)
+
+def myTeacherComment(request, id):
+    grade = Grade.objects.get(pk=id)
 
     context = {'grade': grade}
-    return render(request,'student_templates/myteacherComment.html',context)
-
+    return render(request, 'student_templates/myteacherComment.html', context)
 
 
 # ------------------------------------- bug Views ----------------------------------#
@@ -475,8 +491,6 @@ def user_list(request):
     return render(request, "user_list.html", context)
 
 
-
-
 def user_form_edit(request, id):
     user = User.objects.get(pk=id)
     form = UserCreationForm(instance=user)
@@ -486,7 +500,6 @@ def user_form_edit(request, id):
             form.save()
     context = {'form': form}
     return render(request, 'user_form_info.html', context)
-
 
 
 def delete_user(request, id):
@@ -505,11 +518,11 @@ def create_user(request):
             return redirect('user_list')
     return render(request, "create_user.html", {"form": form})
 
+
 def showUser(request, id):
     user = User.objects.get(pk=id)
     context = {'user': user}
     return render(request, 'show_details.html', context)
-
 
 
 def addTeacher(request):
@@ -525,7 +538,6 @@ def addTeacher(request):
     return render(request, "admin_templates/addTeacher.html", {"form": form})
 
 
-
 # def search(request):
 #     if request.method=='POST':
 #         searched=request.POST['searched']
@@ -539,7 +551,7 @@ def addTeacher(request):
 def addStudent(request):
     form = UserCreationForm()
     teachers = ((teacher.user)
-               for teacher in Teacher.objects.all())
+                for teacher in Teacher.objects.all())
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         teacherusername = request.POST.get('teacher')
@@ -551,5 +563,10 @@ def addStudent(request):
             my_group = Group.objects.get(name='students')
             my_group.user_set.add(user)
             return redirect('user_list')
-    context = {'form': form,'teachers':teachers}
+    context = {'form': form, 'teachers': teachers}
     return render(request, 'admin_templates/addStudent.html', context)
+
+
+def showMyStudents(request):
+    students = list(Student.objects.filter(teacher=request.user.teacher))
+    return render(request, "teacher_templates/allStudent.html", {'students': students})
