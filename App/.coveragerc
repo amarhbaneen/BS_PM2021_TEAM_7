@@ -1,0 +1,3 @@
+[run]
+source = .
+include = my_app/*

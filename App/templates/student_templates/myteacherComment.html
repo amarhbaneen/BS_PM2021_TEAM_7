@@ -1,0 +1,31 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+
+
+
+
+
+    <div class="col-md">
+    <div class="card">
+  <div class="card-header">
+   <h2>{{ grade.solution.homeWork.homeWorkTitle}}</h2>
+  </div>
+  <div class="card-body">
+
+    <h5 class="card-title">{{ grade.teacherComment }}</h5>
+      <a class="btn btn-outline-info" href="{% url 'myGrades' %}"> &#8592; Back to My Grades</a>
+
+
+  </div>
+
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+{% endblock content %}
