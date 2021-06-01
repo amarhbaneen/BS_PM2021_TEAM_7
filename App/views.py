@@ -305,6 +305,11 @@ def admin_mesaage_delete(request, id):
     message.delete()
     return redirect('dashboard')
 
+def showAdminMessages(request):
+    messages = list(AdminMessage.objects.all())
+    return render(request, "admin_templates/all_messages.html", {'messages': messages})
+
+
 
 # -------------------------------------- student Views ----------------------------------#
 # @author Amar Alsana

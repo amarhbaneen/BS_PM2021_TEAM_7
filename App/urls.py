@@ -37,8 +37,7 @@ urlpatterns = [
     path('addStudent',views.addStudent,name="addStudent"),
     path('addTeacher',views.addTeacher,name="addTeacher"),
     path('myGrades',views.myGrades,name="myGrades"),
-
-
+    path('showAdminMessages', views.showAdminMessages, name="showAdminMessages"),
 
     path('user_list/',views.user_list,name="user_list"),
     path('update/<int:id>',views.user_form_edit,name="update_user_info"),
