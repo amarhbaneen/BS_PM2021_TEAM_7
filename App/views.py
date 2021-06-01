@@ -15,7 +15,13 @@ from App.filters import *
 
 
 def adminPage(request):
-    return render(request, 'dashboard.html')
+    userList= User.objects.all()[:3]
+    messageList=AdminMessage.objects.all()[:3]
+    totalusers=User.objects.all().count()
+    countTeacher=Teacher.objects.all().count()
+    countStudent=Student.objects.all().count()
+    context={'userList':userList,'messageList':messageList,'totalusers':totalusers,'countTeacher':countTeacher,'countStudent':countStudent}
+    return render(request, 'dashboard.html',context)
 
 
 def home(requset):
@@ -291,13 +297,13 @@ def admin_message_form(request, id=0):
             form = AdminMessageForm(request.POST, instance=message)
         if form.is_valid():
             form.save()
-        return redirect('homepage')
+        return redirect('dashboard')
 
 
 def admin_mesaage_delete(request, id):
     message = AdminMessage.objects.get(pk=id)
     message.delete()
-    return redirect('homepage')
+    return redirect('dashboard')
 
 
 # -------------------------------------- student Views ----------------------------------#
