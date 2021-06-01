@@ -22,17 +22,18 @@ def home(requset):
     return render(requset, 'home.html')
 
 
+
+
 def profile(request):
     user = request.user
-    form = UserCreationForm(instance=user)
-
+    form = User_edit_form(instance=user)
     if request.method == 'POST':
-        form = UserCreationForm(request.POST, instance=form)
+
+        form = User_edit_form(request.POST, instance=user)
         if form.is_valid():
             form.save()
 
     context = {'form': form}
-
     return render(request, 'profile.html', context)
 
 
@@ -474,32 +475,12 @@ def user_form_edit(request, id):
     return render(request, 'user_form_info.html', context)
 
 
-    '''form = UserCreationForm(instance=user)
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST, instance=form)
-        if form.is_valid():
-            form.save()
-            return redirect('user_list')
-    context = {'form': form}
-    return render(request, 'user_form_info.html', context)'''
-
-
 
 def delete_user(request, id):
     user = User.objects.get(pk=id)
     user.delete()
     return redirect('user_list')
 
-'''
-def create_user(request):
-    form = UserCreationForm()
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            curr_user = form.save()
-            Teacher.objects.create(user=curr_user)
-            return redirect('user_list')
-    return render(request, "create_user.html", {"form": form})'''
 
 def showUser(request, id):
     user = User.objects.get(pk=id)
