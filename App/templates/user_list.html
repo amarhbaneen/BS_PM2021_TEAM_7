@@ -29,6 +29,8 @@
                    <button type="button" class="btn btn-success">Add Student</button>
 
               </a>
+              {% if messages %}
+        {% endif %}
           </td>
 
       </tr>
@@ -39,7 +41,7 @@
           <tr>
           <td>{{ user.username}} </td>
           <td>
-              <a href="" >
+              <a href="{%  url 'update_user_info'  user.id %}" methods="POST">
                   <button type="button" class="btn btn-secondary">update</button>
               </a>
               <form action="{%  url 'delete_user'  user.id %}" method="post" class="d-inline" >
@@ -53,5 +55,4 @@
          {% endfor %}
     </tbody>
     </table>
-
 {% endblock  %}
