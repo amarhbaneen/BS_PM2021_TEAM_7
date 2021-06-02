@@ -129,18 +129,7 @@ class studiesTest(TestCase):
 
 
 # ================================ test for User ======================================#
-class UserTest(TestCase):
-    def test_add_user_GET(self):
-        c = Client()
-        response = c.get(reverse('create_user'))
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'create_user.html')
 
-    def test_add_user_template(self):
-        c = Client()
-        response = c.get(reverse('create_user'))
-        self.assertEquals(response.status_code, 200)
-        self.assertTemplateNotUsed(response, 'login.html')
 
 
     def test_login(self):
