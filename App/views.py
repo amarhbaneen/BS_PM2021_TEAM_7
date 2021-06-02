@@ -90,13 +90,12 @@ def Teacher_Signup(request):
         email = request.POST['email']
         if password1 == password2:
             if User.objects.filter(username=username):
-                messages.info(request, 'username is taken')
-                return redirect('teacher_templates/teacher_register.html')
+                messages.error(request, 'username is taken')
+
             else:
-                # Teacher_ID = User.objects.get(pk=request.user.id)
-                # if Teacher_ID==ID:
                 user = User.objects.create_user(username=username, email=email, password=password1,
-                                                last_name=last_name, first_name=first_name)
+                                                last_name=last_name,
+                                                first_name=first_name)
                 user.save()
                 Teacher.objects.create(user=user)
                 my_group = Group.objects.get(name='teachers')
@@ -104,10 +103,9 @@ def Teacher_Signup(request):
                 print("user is created")
                 return redirect('login')
         else:
-            messages.info(request, 'passwords doesnt mach')
-            return redirect('teacher_templates/teacher_register')
-    else:
-        return render(request, 'teacher_templates/teacher_register.html')
+            messages.error(request, 'passwords doesnt mach')
+
+    return render(request, 'teacher_templates/teacher_register.html')
 
 
 def Student_Signup(request):
@@ -127,8 +125,8 @@ def Student_Signup(request):
         teacher = Teacher.objects.get(user=teacheruser)
         if password1 == password2:
             if User.objects.filter(username=username):
-                messages.info(request, 'username is taken')
-                return redirect('student_templates/student_register.html')
+                messages.error(request, 'username is taken')
+
             else:
                 user = User.objects.create_user(username=username, email=email, password=password1,
                                                 last_name=last_name,
@@ -140,10 +138,9 @@ def Student_Signup(request):
                 print("user is created")
                 return redirect('login')
         else:
-            messages.info(request, 'passwords doesnt mach')
-            return redirect('student_templates/student_register')
-    else:
-        return render(request, 'student_templates/student_register.html', context)
+            messages.error(request, 'passwords doesnt mach')
+
+    return render(request, 'student_templates/student_register.html', context)
 
 
 def createSolution(request, id):

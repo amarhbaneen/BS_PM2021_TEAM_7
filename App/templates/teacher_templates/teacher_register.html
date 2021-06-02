@@ -310,13 +310,13 @@ input[type=password]::placeholder {
     <form method="post" action="{% url 'Teacher_Signup' %}">
         {% csrf_token %}
         <b/>
-      <input type="text" id="login" class="fadeIn second" name="username" placeholder="username" autocomplete="off">
-      <input type="password" id="password1" class="fadeIn second" name="password1" placeholder="password">
-      <input type="password" id="password2" class="fadeIn second" name="password2" placeholder="confirm password">
-      <input type="text" id="password" class="fadeIn third" name="first_name" placeholder="first name" autocomplete="off">
-      <input type="text" id="password" class="fadeIn third" name="last_name" placeholder="last_name" autocomplete="off">
-      <input type="text" id="password" class="fadeIn third" name="email" placeholder="email" autocomplete="off">
-      <input type="submit" class="fadeIn fourth" value="Sign Up">
+      <input type="text" id="login" class="fadeIn second" name="username" placeholder="username" autocomplete="off" required>
+      <input type="password" id="password1" class="fadeIn second" name="password1" placeholder="password" required>
+      <input type="password" id="password2" class="fadeIn second" name="password2" placeholder="confirm password" required>
+      <input type="text" id="password" class="fadeIn third" name="first_name" placeholder="first name" autocomplete="off" required>
+      <input type="text" id="password" class="fadeIn third" name="last_name" placeholder="last_name" autocomplete="off" required>
+      <input type="text" id="password" class="fadeIn third" name="email" placeholder="email" autocomplete="off" required>
+      <input type="submit" class="fadeIn fourth" value="Sign Up" required>
 
 
 
