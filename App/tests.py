@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.test import TestCase
+from django.test import TestCase,tag
 from django.urls import reverse
 from django.test import Client
 from App.models import *
@@ -10,6 +10,7 @@ import requests
 
 
 # ------------tests for some admin functionality  ------     -- ------------------
+@tag("unit_test")
 class AdminMessageFormTests(TestCase):
     def test_Add_Message_GET(self):
         c = Client()
