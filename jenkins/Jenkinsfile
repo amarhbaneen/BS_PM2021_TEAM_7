@@ -15,7 +15,7 @@ pipeline {
 					}
 			}
         }
-        stage('Test') {
+        stage(' Unit Tests') {
             agent {
                 docker {
                     image 'amarhabneen/bm_team7'
@@ -23,7 +23,7 @@ pipeline {
             }
             steps {
 		            withEnv(["HOME=${env.WORKSPACE}"]) {
-                sh 'python manage.py test'
+                sh 'python manage.py test --tag=unit_test'
 		      }
 			}
         }
