@@ -195,14 +195,16 @@ def editSolution(request, id):
 
 def Delete_solution(request, id):
     homework = HomeWork.objects.get(pk=id)
-    teacher = homework.teacher
     student = Student.objects.get(user=request.user)
     try:
-        The_solution = StudentSolution.objects.get(homeWork=homework, teacher=teacher, student=student)
-        if The_solution.exists():
+        The_solution = StudentSolution.objects.get(homeWork=homework, student=student)
+        if The_solution.id == 0:
+            return redirect('student_dashboard')
+        else:
             The_solution.delete()
+            return redirect('student_dashboard')
     except ObjectDoesNotExist:
-        return redirect('login')
+        return redirect('student_dashboard')
 
 
 def logoutUser(request):
