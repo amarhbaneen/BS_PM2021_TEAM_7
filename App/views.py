@@ -144,24 +144,30 @@ def Student_Signup(request):
 
 
 def createSolution(request, id):
-    SolutionFormSet = inlineformset_factory(Student, StudentSolution, fields=('solutionContent',), extra=1,
-                                            can_delete=False)
+    homework = HomeWork.objects.get(pk=id)
     student = Student.objects.get(user=request.user)
-    homeWork = HomeWork.objects.get(pk=id)
-    teacher = student.teacher
-    initial = {'homeWork': homeWork, 'teacher': teacher, 'student': student}
-
-    formset = SolutionFormSet(queryset=StudentSolution.objects.none(), instance=student)
-    if request.method == 'POST':
-        formset = SolutionFormSet(request.POST, instance=student)
-        if formset.is_valid():
-            sol = formset.save(commit=False)
-            sol[0].homeWork = homeWork
-            sol[0].teacher = teacher
-            sol[0].save()
-            return redirect('student_dashboard')
-    context = {'form': formset}
-    return render(request, 'student_templates/createSolution.html', context)
+    if request.method == 'GET':
+        try:
+            solution = StudentSolution.objects.get(homeWork=homework, student=student)
+            if solution.id == 0:
+                form=SolutionForm()
+            else:
+                return redirect('student_dashboard')
+        except ObjectDoesNotExist:
+            form=SolutionForm()
+        return render(request, "student_templates/EditSolution.html", {'form': form})
+    else:
+        try:
+            solution = StudentSolution.objects.get(homeWork=homework, student=student)
+            if solution.id == 0:
+                form=SolutionForm(request.POST)
+            else:
+                return redirect('student_dashboard')
+        except ObjectDoesNotExist:
+            form=SolutionForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('student_dashboard')
 
 
 def editSolution(request, id):
@@ -171,23 +177,23 @@ def editSolution(request, id):
         try:
             solution = StudentSolution.objects.get(homeWork=homework, student=student)
             if solution.id == 0:
-                form = SolutionForm()
+                return redirect('student_dashboard')
             else:
                 MySol = StudentSolution.objects.get(pk=solution.id)
                 form = SolutionForm(instance=MySol)
         except ObjectDoesNotExist:
-            form = SolutionForm()
+            return redirect('student_dashboard')
         return render(request, "student_templates/EditSolution.html", {'form': form})
     else:
         try:
             solution = StudentSolution.objects.get(homeWork=homework, student=student)
             if solution.id == 0:
-                form = SolutionForm(request.POST)
+                return redirect('student_dashboard')
             else:
                 MySol = StudentSolution.objects.get(pk=solution.id)
                 form = SolutionForm(request.POST, instance=MySol)
         except ObjectDoesNotExist:
-            form = SolutionForm(request.POST)
+            return redirect('student_dashboard')
         if form.is_valid():
             form.save()
         return redirect('student_dashboard')

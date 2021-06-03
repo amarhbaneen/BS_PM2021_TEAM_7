@@ -57,7 +57,7 @@ urlpatterns = [
 #    path('show_details/<int:id>', views.showUser, name="show_details"),
     # path('update_user/<int:id>',views.update_form,name="update_user_form"),
     path('editSolution/<int:id>', views.editSolution, name="editSolution"),
-    path('createSolution/<int:id>',views.editSolution,name="createSolution"),
+    path('createSolution/<int:id>',views.createSolution,name="createSolution"),
     path('deleteSolution/<int:id>',views.Delete_solution,name="deleteSolution"),
     path('showstudents', views.showMyStudents, name="showMystudent"),
     path('reset_password/',
