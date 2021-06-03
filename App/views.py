@@ -1,5 +1,6 @@
 from django.contrib import auth
 from django.contrib import auth
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
@@ -22,19 +23,18 @@ from App.filters import *
 
 
 def adminPage(request):
-    userList= User.objects.all()[:3]
-    messageList=AdminMessage.objects.all()[:3]
-    totalusers=User.objects.all().count()
-    countTeacher=Teacher.objects.all().count()
-    countStudent=Student.objects.all().count()
-    context={'userList':userList,'messageList':messageList,'totalusers':totalusers,'countTeacher':countTeacher,'countStudent':countStudent}
-    return render(request, 'dashboard.html',context)
+    userList = User.objects.all()[:3]
+    messageList = AdminMessage.objects.all()[:3]
+    totalusers = User.objects.all().count()
+    countTeacher = Teacher.objects.all().count()
+    countStudent = Student.objects.all().count()
+    context = {'userList': userList, 'messageList': messageList, 'totalusers': totalusers, 'countTeacher': countTeacher,
+               'countStudent': countStudent}
+    return render(request, 'dashboard.html', context)
 
 
 def home(requset):
     return render(requset, 'home.html')
-
-
 
 
 def profile(request):
@@ -165,24 +165,44 @@ def createSolution(request, id):
 
 
 def editSolution(request, id):
-    if request.method == "GET":
-        if id == 0:
+    homework = HomeWork.objects.get(pk=id)
+    student = Student.objects.get(user=request.user)
+    if request.method == 'GET':
+        try:
+            solution = StudentSolution.objects.get(homeWork=homework, student=student)
+            if solution.id == 0:
+                form = SolutionForm()
+            else:
+                MySol = StudentSolution.objects.get(pk=solution.id)
+                form = SolutionForm(instance=MySol)
+        except ObjectDoesNotExist:
             form = SolutionForm()
-        else:
-            solution = StudentSolution.objects.get(pk=id)
-            form = SolutionForm(instance=solution)
         return render(request, "student_templates/EditSolution.html", {'form': form})
-
     else:
-        if id == 0:
+        try:
+            solution = StudentSolution.objects.get(homeWork=homework, student=student)
+            if solution.id == 0:
+                form = SolutionForm(request.POST)
+            else:
+                MySol = StudentSolution.objects.get(pk=solution.id)
+                form = SolutionForm(request.POST, instance=MySol)
+        except ObjectDoesNotExist:
             form = SolutionForm(request.POST)
-
-        else:
-            solution = StudentSolution.objects.get(pk=id)
-            form = SolutionForm(request.POST, instance=solution)
         if form.is_valid():
             form.save()
         return redirect('student_dashboard')
+
+
+def Delete_solution(request, id):
+    homework = HomeWork.objects.get(pk=id)
+    teacher = homework.teacher
+    student = Student.objects.get(user=request.user)
+    try:
+        The_solution = StudentSolution.objects.get(homeWork=homework, teacher=teacher, student=student)
+        if The_solution.exists():
+            The_solution.delete()
+    except ObjectDoesNotExist:
+        return redirect('login')
 
 
 def logoutUser(request):
@@ -351,10 +371,10 @@ def admin_mesaage_delete(request, id):
     message.delete()
     return redirect('dashboard')
 
+
 def showAdminMessages(request):
     messages = list(AdminMessage.objects.all())
     return render(request, "admin_templates/all_messages.html", {'messages': messages})
-
 
 
 # -------------------------------------- student Views ----------------------------------#
@@ -490,7 +510,6 @@ def study_delete(request, id):
 
 
 def user_list(request):
-
     myFilter = userFilter(request.GET, queryset=User.objects.all())
 
     user_list = myFilter.qs
@@ -501,12 +520,11 @@ def user_list(request):
 
 
 def user_form_edit(request, id):
-
     user = User.objects.get(pk=id)
     form = User_edit_form(instance=user)
-    if request.method=='POST':
-        a=request.POST['username']
-        form=User_edit_form(request.POST,instance=user)
+    if request.method == 'POST':
+        a = request.POST['username']
+        form = User_edit_form(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('user_list')

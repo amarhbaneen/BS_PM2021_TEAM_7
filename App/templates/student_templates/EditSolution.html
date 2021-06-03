@@ -9,10 +9,21 @@
 			<form action="" method="POST">
 				{% csrf_token %}
 				{{ form.management_form }}
-				{% for field in form %}
-					{{field}}
-					<hr>
-				{% endfor %}
+				<br>
+                    <br>
+					<th>Student name:</th>
+                    {{ form.student }}
+                    </br>
+
+                    <br>
+                    <th>Homework Title:</th>
+                    {{ form.homeWork }}
+                    </br>
+
+                    <br>
+					<th>Solution Content:</th>
+                    {{ form.solutionContent }}
+                    </br>
 
 				<input type="submit" name="Submit">
 			</form>
