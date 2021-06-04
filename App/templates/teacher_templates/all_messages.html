@@ -22,10 +22,10 @@
                     {% for  i in messages %}
                     <tr>
               <td> {{ i.messageTitle }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">Edit</a></td>
+                     <td>  <a class="btn btn-outline-success" href="{% url 'editTeacherMessage' i.pk %}" role="button">Edit</a></td>
 
 
-                     <td>  <a class="btn btn-outline-danger" href="#" role="button">Delete</a></td>
+                     <td>  <a class="btn btn-outline-danger" href="{% url 'deleteTeacherMessage' i.pk %}" role="button">Delete</a></td>
                     </tr>
                 {% endfor %}
 						
