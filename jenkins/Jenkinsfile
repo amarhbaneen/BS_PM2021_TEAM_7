@@ -27,6 +27,18 @@ pipeline {
 		      }
 			}
         }
+        stage(' integration-test') {
+            agent {
+                docker {
+                    image 'amarhabneen/bm_team7'
+                }
+            }
+            steps {
+		            withEnv(["HOME=${env.WORKSPACE}"]) {
+                sh 'python manage.py test --tag=integration-test'
+		      }
+			}
+        }
         stage(' unit test coverage') {
         agent {
                 docker {

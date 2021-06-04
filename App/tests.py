@@ -13,18 +13,21 @@ import requests
 # ------------tests for some admin functionality  ------     -- ------------------
 @tag("unit_test")
 class AdminMessageFormTests(TestCase):
+    @tag('unit-test')
     def test_Add_Message_GET(self):
         c = Client()
         response = c.get(reverse('createmessage'))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'admin_templates/admin_message_form.html')
 
+    @tag('unit-test')
     def test_Add_Message_GET2(self):
         c = Client()
         response = c.get(reverse('createmessage'))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateNotUsed(response, 'teacher_templates/message_form.html')
 
+    @tag('unit-test')
     def test_Add_Teacher_Message_GET(self):
         c = Client()
         response = c.get(reverse('create_teacher_message'))
@@ -75,7 +78,7 @@ class AdminMessageFormTests(TestCase):
 
 class TeacherMessageFormTests(TestCase):
 
-
+    @tag('unit-test')
     def test_Add_Message_Template(self):
         c = Client()
         response = c.get(reverse('create_teacher_message'))
@@ -114,13 +117,14 @@ class homeworkTest(TestCase):
 
 # ---------------------------------- test for Studies ---------------------------------------#
 class studiesTest(TestCase):
+    @tag('unit-test')
     def test_Add_study_GET(self):
         c = Client()
         response = c.get(reverse('addstudy'))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'studies_templates/study_form.html')
 
-
+    @tag('unit-test')
     def test_Add_study_Template(self):
         c = Client()
         response = c.get(reverse('addstudy'))
@@ -132,14 +136,14 @@ class studiesTest(TestCase):
 
 # ================================ test for User ======================================#
 
-
-
+    @tag('unit-test')
     def test_login(self):
         login = self.client.login(username='test', password='test')
         self.assertFalse(login)
 
 #=================================== test for Soltuions =========================================#
 class SoltuionsTest(TestCase):
+    @tag('unit-test')
     def test_add_soltuion_GET(self):
         c = Client()
         response = c.get(reverse('Solution_form'))
@@ -153,6 +157,7 @@ class SoltuionsTest(TestCase):
 
 
 class loginTest(TestCase):
+
     @tag('unit-test')
     def test_login_access_url(self):
         response = self.client.get('/login/')
@@ -163,16 +168,19 @@ class loginTest(TestCase):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
 
+    @tag('unit-test')
     def testLoginUsedTemplate(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'login.html')
 
+    @tag('unit-test')
     def testLogin_NOT_UsedTemplate(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response,'home.html')
 
+    @tag('unit-test')
     def testUserLogin(self):
 
         User.objects.create(username='aa', password='aa')
@@ -215,16 +223,19 @@ class RegisterTest_Teacher(TestCase):
         response = self.client.get(reverse('Teacher_Signup'))
         self.assertEqual(response.status_code, 200)
 
+    @tag('unit-test')
     def testRegisterUsedTemplate(self):
         response = self.client.get(reverse('Teacher_Signup'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'teacher_templates/teacher_register.html')
 
+    @tag('unit-test')
     def testRegister_NOT_UsedTemplate(self):
         response = self.client.get(reverse('Teacher_Signup'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response, 'home.html')
 
+    @tag('unit-test')
     def testTeacherRegister(self):
         User.objects.create(username='aa', password='aa')
 
@@ -293,16 +304,19 @@ class RegisterTest_Student(TestCase):
         response = self.client.get(reverse('Student_Signup'))
         self.assertEqual(response.status_code, 200)
 
+    @tag('unit-test')
     def testRegisterUsedTemplate(self):
         response = self.client.get(reverse('Student_Signup'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'student_templates/student_register.html')
 
+    @tag('unit-test')
     def testRegister_NOT_UsedTemplate(self):
         response = self.client.get(reverse('Student_Signup'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response, 'home.html')
 
+    @tag('unit-test')
     def testStudentRegister(self):
         User.objects.create(username='aa', password='aa')
 
