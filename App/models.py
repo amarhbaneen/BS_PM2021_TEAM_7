@@ -105,3 +105,11 @@ class Bugreport(models.Model):
 
     def __str__(self):
         return self.bugContent
+
+
+class TeacherId(models.Model):
+    teacherId = models.IntegerField()
+
+
+    def __str__(self):
+        return self.teacherId

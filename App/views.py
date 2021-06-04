@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.forms import inlineformset_factory
+from django.forms import inlineformset_factory, formset_factory, modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
 from django import template
 from django.contrib.auth.models import Group, User
@@ -22,19 +22,18 @@ from App.filters import *
 
 
 def adminPage(request):
-    userList= User.objects.all()[:3]
-    messageList=AdminMessage.objects.all()[:3]
-    totalusers=User.objects.all().count()
-    countTeacher=Teacher.objects.all().count()
-    countStudent=Student.objects.all().count()
-    context={'userList':userList,'messageList':messageList,'totalusers':totalusers,'countTeacher':countTeacher,'countStudent':countStudent}
-    return render(request, 'dashboard.html',context)
+    userList = User.objects.all()[:3]
+    messageList = AdminMessage.objects.all()[:3]
+    totalusers = User.objects.all().count()
+    countTeacher = Teacher.objects.all().count()
+    countStudent = Student.objects.all().count()
+    context = {'userList': userList, 'messageList': messageList, 'totalusers': totalusers, 'countTeacher': countTeacher,
+               'countStudent': countStudent}
+    return render(request, 'dashboard.html', context)
 
 
 def home(requset):
     return render(requset, 'home.html')
-
-
 
 
 def profile(request):
@@ -56,7 +55,8 @@ def login(request):
             username = request.POST['username']
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
-            if user is not None and user.groups.filter(name='admins').exists():
+
+            if user is not None:
                 auth.login(request, user)
                 return redirect('dashboard')
             elif user is not None and user.groups.filter(name='students').exists():
@@ -87,9 +87,12 @@ def Teacher_Signup(request):
         username = request.POST['username']
         password1 = request.POST['password1']
         password2 = request.POST['password2']
+        id = request.POST['id']
         email = request.POST['email']
         if password1 == password2:
-            if User.objects.filter(username=username):
+            if not TeacherId.objects.filter(teacherId=id).count() == 1:
+                messages.error(request, 'your id is wrong')
+            elif User.objects.filter(username=username):
                 messages.error(request, 'username is taken')
 
             else:
@@ -104,6 +107,9 @@ def Teacher_Signup(request):
                 return redirect('login')
         else:
             messages.error(request, 'passwords doesnt mach')
+
+
+
 
     return render(request, 'teacher_templates/teacher_register.html')
 
@@ -266,28 +272,30 @@ def addGrade(request, id):
 
 
 # -------------------------------------- homework Views ----------------------------------#
-# @author Amar Alsana
 def homework_form(request, id=0):
+    user=User.objects.get(username=request.user)
+    teacher=Teacher.objects.get(user=user)
+    data={'teacher':teacher}
     # creating new form for inserting or editing existed homework
     if request.method == "GET":
         if id == 0:
-            form = HomeworkForm()
+            form = HomeworkForm(initial=data)
 
 
 
 
         else:
             homework = HomeWork.objects.get(pk=id)
-            form = HomeworkForm(instance=homework)
+            form = HomeworkForm(instance=homework,initial=data)
 
         return render(request, "homework_templates/homework_form.html", {'form': form})
     else:
         if id == 0:
-            form = HomeworkForm(request.POST)
+            form = HomeworkForm(request.POST,initial=data)
 
         else:
             homework = HomeWork.objects.get(pk=id)
-            form = HomeworkForm(request.POST, instance=homework)
+            form = HomeworkForm(request.POST, instance=homework,initial=data)
         if form.is_valid():
             # homework_1 = form.save(commit=False)
             # homework_1.teacher = Teacher.objects.get(user = request.user)
@@ -351,10 +359,10 @@ def admin_mesaage_delete(request, id):
     message.delete()
     return redirect('dashboard')
 
+
 def showAdminMessages(request):
     messages = list(AdminMessage.objects.all())
     return render(request, "admin_templates/all_messages.html", {'messages': messages})
-
 
 
 # -------------------------------------- student Views ----------------------------------#
@@ -374,16 +382,32 @@ def student_dashboard(request):
 
 
 def showStudentHomeworks(request):
+    homeWorks_Exist = []
+
     student = Student.objects.get(user=request.user)
     homeworks = HomeWork.objects.filter(teacher=student.teacher)
-    context = {'homework_list': homeworks}
+    for hw in homeworks:
+        sol = StudentSolution.objects.filter(homeWork=hw, student=student, teacher=student.teacher)
+        if sol.count()>0:
+            homeWorks_Exist.append([hw,False,sol.first()])
+        else:
+            homeWorks_Exist.append([hw, True,None])
+
+
+
+    context = {'homework_list': homeworks, 'homeWorks_Exist': homeWorks_Exist}
     return render(request, "student_templates/showStudentHomeworks.html", context)
 
 
 def showSingleHomeWork(request, id):
     homework = HomeWork.objects.get(pk=id)
+    student = Student.objects.get(user=request.user)
     form = HomeworkForm(instance=homework)
-    context = {'homework': homework}
+    isSolutionExist=True
+    sol=StudentSolution.objects.filter(homeWork=homework,student=student,teacher=student.teacher)
+    if sol.count()>0:
+        isSolutionExist=False
+    context = {'homework': homework,'isSolutionExist':isSolutionExist,'solution':sol.first()}
     return render(request, "student_templates/showSingleHomeWork.html", context)
 
 
@@ -414,6 +438,51 @@ def myTeacherComment(request, id):
 
     context = {'grade': grade}
     return render(request, 'student_templates/myteacherComment.html', context)
+
+
+def createSolution(request, id):
+    student = Student.objects.get(user=request.user)
+    homeWork = HomeWork.objects.get(pk=id)
+    teacher = student.teacher
+    data = [{'student': student, 'homeWork': homeWork, 'teacher': teacher}]
+    SolutionFormSet = modelformset_factory(StudentSolution, form=SolutionForm,
+                                           exclude=('homeWork', 'teacher', 'student',), extra=1)
+    formset = SolutionFormSet(queryset=StudentSolution.objects.none())
+
+    if request.method == 'POST':
+        formset = SolutionFormSet(request.POST)
+        if formset.is_valid():
+            instance = formset.save(commit=False)
+            instance[0].student = student
+            instance[0].homeWork = homeWork
+            instance[0].teacher = teacher
+            instance[0].save()
+            return redirect('myHomeWorks')
+    context = {'form': formset,'homeWork':homeWork}
+    return render(request, 'student_templates/createSolution.html', context)
+
+
+def editSolution(request, id, sol_id):
+    student = Student.objects.get(user=request.user)
+    homeWork = HomeWork.objects.get(pk=id)
+    teacher = student.teacher
+    data = [{'student': student, 'homeWork': homeWork, 'teacher': teacher}]
+    SolutionFormSet = modelformset_factory(StudentSolution, form=SolutionForm,
+                                           exclude=('homeWork', 'teacher', 'student',), extra=0)
+    formset = SolutionFormSet(queryset=StudentSolution.objects.filter(pk=sol_id))
+
+    if request.method == 'POST':
+        formset = SolutionFormSet(request.POST)
+        if formset.is_valid():
+            if formset.has_changed():
+                instance = formset.save(commit=False)
+                instance[0].student = student
+                instance[0].homeWork = homeWork
+                instance[0].teacher = teacher
+                instance[0].save()
+            return redirect('myHomeWorks')
+    context = {'form': formset}
+    return render(request, 'student_templates/createSolution.html', context)
 
 
 # ------------------------------------- bug Views ----------------------------------#
@@ -490,7 +559,6 @@ def study_delete(request, id):
 
 
 def user_list(request):
-
     myFilter = userFilter(request.GET, queryset=User.objects.all())
 
     user_list = myFilter.qs
@@ -501,12 +569,11 @@ def user_list(request):
 
 
 def user_form_edit(request, id):
-
     user = User.objects.get(pk=id)
     form = User_edit_form(instance=user)
-    if request.method=='POST':
-        a=request.POST['username']
-        form=User_edit_form(request.POST,instance=user)
+    if request.method == 'POST':
+        a = request.POST['username']
+        form = User_edit_form(request.POST, instance=user)
         if form.is_valid():
             form.save()
             return redirect('user_list')
