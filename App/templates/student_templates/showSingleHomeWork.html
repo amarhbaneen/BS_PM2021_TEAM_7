@@ -17,7 +17,7 @@
       {% if isSolutionExist %}
     <a href="{% url 'create_solution_new' homework.pk %}" class="btn btn-outline-success" >Add solution</a>
     {% else %}
-          <td><button type="button" class="btn btn-success" disabled>Add solution</button></td>
+
           <a href="{% url 'edit_solution_new' homework.pk solution.pk %}" class="btn btn-outline-warning" >Edit solution</a>
 
       {% endif %}
