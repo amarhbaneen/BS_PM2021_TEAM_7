@@ -49,7 +49,9 @@ pipeline {
 
 					withEnv(["HOME=${env.WORKSPACE}"]) {
 						
-						sh "python -m coverage run -a manage.py test"
+						sh "coverage run manage.py test"
+						sh "coverage report --fail-under=50"
+
 					}
 
 			}

@@ -1,3 +1,9 @@
 [run]
 source = .
 include = my_app/*
+omit =
+    *settings.py*
+    *wsgi.py*
+    *manage.py*
+    *admin.py*
+
