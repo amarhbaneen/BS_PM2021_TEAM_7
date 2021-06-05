@@ -164,9 +164,19 @@ class loginTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     @tag('unit-test')
-    def test_login_access_url(self):
+    def test_login_access_name(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_login_access_url_negative(self):
+        response = self.client.get('/login/')
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_login_access_name_negative(self):
+        response = self.client.get(reverse('login'))
+        self.assertNotEqual(response.status_code, 300)
 
     @tag('unit-test')
     def testLoginUsedTemplate(self):
@@ -222,6 +232,16 @@ class RegisterTest_Teacher(TestCase):
     def test_register_access_name(self):
         response = self.client.get(reverse('Teacher_Signup'))
         self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_register_access_url_negative(self):
+        response = self.client.get('/Teacher_Register/')
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_register_access_name_negative(self):
+        response = self.client.get(reverse('Teacher_Signup'))
+        self.assertNotEqual(response.status_code, 300)
 
     @tag('unit-test')
     def testRegisterUsedTemplate(self):
@@ -305,6 +325,16 @@ class RegisterTest_Student(TestCase):
         self.assertEqual(response.status_code, 200)
 
     @tag('unit-test')
+    def test_register_access_url_negative(self):
+        response = self.client.get('/Student_Register/')
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_register_access_name_negative(self):
+        response = self.client.get(reverse('Student_Signup'))
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
     def testRegisterUsedTemplate(self):
         response = self.client.get(reverse('Student_Signup'))
         self.assertEqual(response.status_code, 200)
@@ -370,11 +400,98 @@ class RegisterTest_Student(TestCase):
 
         response = self.client.get(reverse('logout'), follow=True)
 
-        # Assert
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context["user"].is_authenticated)
 
 
+
+
+
+class LogoutTest(TestCase):
+   def testLogout(self):
+       User.objects.create(username='username', password='username')
+       self.client.login(username='username',password='password')
+
+       response = self.client.get(reverse('logout'), follow=True)
+
+       self.assertEqual(response.status_code, 200)
+       self.assertFalse(response.context["user"].is_authenticated)
+
+class ProfileTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='username', email='email',
+                                        last_name='last_name',
+                                        first_name='first_name')
+        self.user.set_password('password')
+        self.user.save()
+
+    @tag('unit-test')
+    def test_profile_access_url(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('profile'))
+
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_profile_access_name(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get('/profile')
+
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_profile_access_url_Negateve(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('profile'))
+
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_profile_access_name_Negateve(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get('/profile')
+
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def testProfileUsedTemplate(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'profile.html')
+
+    @tag('unit-test')
+    def testProfile_NOT_UsedTemplate(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response,'home.html')
+
+    @tag('integration-test')
+    def testLoginAndAccsesViewAndLogout(self):
+
+        #Login
+        self.client.force_login(self.user)
+        #accss view
+        response = self.client.get(reverse('profile'))
+        self.assertTrue(response.context['user'].is_authenticated)
+
+
+        self.assertNotEqual(response.status_code, 300)
+
+        #logout
+        response = self.client.get(reverse('logout'), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context["user"].is_authenticated)
 
 
 
