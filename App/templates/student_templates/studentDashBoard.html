@@ -32,14 +32,24 @@
 					<th>Add solution</th>
 					<th>Edit solution</th>
 				</tr>
-                {% for  i in homework_list %}
+                {% for  hw , flag , sol in homeWorks_Exist  %}
+
                     <tr>
-              <td> {{ i.homeWorkTitle }}</td>
-                     <td>  <a class="btn btn-outline-success" href="{% url 'createSolution' i.pk %}" role="button">Add</a></td>
+              <td> {{ hw.homeWorkTitle}}</td>
+                     <td>  <a class="btn btn-outline-success" href={% url 'showHomeWork' hw.id %}> show</a></td>
+
+                        {% if flag %}
+    <td><a href="{% url 'create_solution_new' hw.pk %}" class="btn btn-outline-success" >Add solution</a></td>
+                           <td> <button type="button" class="btn btn-warning" disabled>Edit solution</button></td>
+
+    {% else %}
+          <td><button type="button" class="btn btn-success" disabled>Add solution</button></td>
+          <td><a href="{% url 'edit_solution_new' hw.pk sol.pk %}" class="btn btn-outline-warning" >Edit solution</a></td>
 
 
-                     <td>  <a class="btn btn-warning" href="{% url 'editSolution' i.pk %}" role="button">Edit</a></td>
-                    </tr>
+
+      {% endif %}
+              </tr>
                 {% endfor %}
 
 			</table>

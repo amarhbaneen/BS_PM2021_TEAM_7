@@ -56,7 +56,7 @@ def login(request):
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
 
-            if user is not None:
+            if user is not None and user.groups.filter(name='admins').exists():
                 auth.login(request, user)
                 return redirect('dashboard')
             elif user is not None and user.groups.filter(name='students').exists():
@@ -369,9 +369,18 @@ def showAdminMessages(request):
 # @author Amar Alsana
 def student_dashboard(request):
     # created Dashboard for the student that shown for the teacher after loging in
-    student = Student.objects.get(user=request.user)
+    homeWorks_Exist = []
 
-    context = {'homework_list': HomeWork.objects.filter(teacher=student.teacher).all()[:3],
+    student = Student.objects.get(user=request.user)
+    homeworks = HomeWork.objects.filter(teacher=student.teacher).all()[:3]
+    for hw in homeworks:
+        sol = StudentSolution.objects.filter(homeWork=hw, student=student, teacher=student.teacher)
+        if sol.count() > 0:
+            homeWorks_Exist.append([hw, False, sol.first()])
+        else:
+            homeWorks_Exist.append([hw, True, None])
+
+    context = {'homeWorks_Exist': homeWorks_Exist,
                'message_list': TeacherMessage.objects.filter(teacher=student.teacher).last(),
                'adminMessage': AdminMessage.objects.last(), 'grade_list': Grade.objects.last(),
                'studies_list': Studies.objects.filter(teacher=student.teacher).all()[:3]
