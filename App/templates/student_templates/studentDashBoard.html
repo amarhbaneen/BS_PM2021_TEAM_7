@@ -74,7 +74,7 @@
                 {% for i in studies_list %}
                     <tr>
               <td> {{ i.title }}</td>
-                     <td>  <a class="btn btn-outline-success" href="#" role="button">show</a></td>
+                     <td>  <a class="btn btn-outline-success" href="{% url 'showstudy' i.id %}" role="button">show</a></td>
 
 
 

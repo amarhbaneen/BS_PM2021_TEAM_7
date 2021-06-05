@@ -319,11 +319,6 @@ def showHomework(request):
     return render(request, 'homework_templates/all_homeworks_student.html', contex)
 
 
-def showstudy(request):
-    student = Student.objects.get(user=request.user)
-
-    contex = {}
-    return render(request, 'homework_templates/all_homeworks_student.html', contex)
 
 
 # -------------------------------------- Admin Views ----------------------------------#
@@ -658,3 +653,9 @@ def addStudent(request):
 def showMyStudents(request):
     students = list(Student.objects.filter(teacher=request.user.teacher))
     return render(request, "teacher_templates/allStudent.html", {'students': students})
+
+
+def showStudy(request ,id):
+    study = Studies.objects.get(pk=id)
+    contex = {'studies': study}
+    return render(request, 'student_templates/allStudies.html', contex)

@@ -74,5 +74,6 @@ urlpatterns = [
          name="password_reset_complete"),
     path('create_solution_new/<int:id>/',views.createSolution,name="create_solution_new"),
     path('edit_solution_new/<int:id>/<int:sol_id>',views.editSolution,name="edit_solution_new"),
+    path('showstudy/<int:id>',views.showStudy,name="showstudy")
 
 ]

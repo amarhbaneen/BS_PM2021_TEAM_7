@@ -21,9 +21,11 @@
 				</tr>
 
                     {% for  i in studies %}
+
                     <tr>
               <td> {{ i.study.title }}</td>
-                <td> </td>
+                <td>   <a class="btn btn-outline-success" href="{% url 'showstudy' i.id %}" role="button">show</a></td>
+
                         {%  if i.finishedFlag == True %}
                             <td><button type="button" class="btn btn-success" disabled>Approved</button></td>
                             {% else%}
