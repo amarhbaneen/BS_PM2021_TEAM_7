@@ -494,6 +494,64 @@ class ProfileTest(TestCase):
         self.assertFalse(response.context["user"].is_authenticated)
 
 
+class ManageUsersTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='username', email='email',
+                                        last_name='last_name',
+                                        first_name='first_name')
+        self.user.set_password('password')
+        self.user.save()
+
+    '''@tag('unit-test')'''
+    '''def test_editUser_access_url(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('update_user_info'),follow=True,data={"id":self.user.id})
+
+        self.assertEqual(response.status_code, 200)'''
+
+    @tag('unit-test')
+    def test_editUser_access_name(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get('/profile')
+
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_editUser_access_url_Negateve(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('profile'))
+
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_editUser_access_name_Negateve(self):
+        # Arrange
+        self.client.force_login(self.user)
+
+        response = self.client.get('/profile')
+
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def testeditUserUsedTemplate(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'profile.html')
+
+    @tag('unit-test')
+    def testeditUser_NOT_UsedTemplate(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('profile'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response,'home.html')
+
 
 
 
