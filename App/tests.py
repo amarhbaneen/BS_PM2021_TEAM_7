@@ -485,7 +485,7 @@ class ProfileTest(TestCase):
         self.assertTrue(response.context['user'].is_authenticated)
 
 
-        self.assertNotEqual(response.status_code, 300)
+        self.assertEqual(response.status_code, 200)
 
         #logout
         response = self.client.get(reverse('logout'), follow=True)
