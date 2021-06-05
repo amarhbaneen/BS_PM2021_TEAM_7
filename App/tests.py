@@ -33,6 +33,11 @@ class AdminMessageFormTests(TestCase):
         response = c.get(reverse('create_teacher_message'))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'teacher_templates/message_form.html')
+
+
+
+
+
     '''
     def test_deleteTeacher_message_POST(self):
         url = "http://127.0.0.1:8000/deleteTeacherMessage/4"
@@ -551,6 +556,139 @@ class ManageUsersTest(TestCase):
         response = self.client.get(reverse('profile'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response,'home.html')
+
+
+
+##############################################################
+
+
+class HomeWorkTest_(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='username', email='email',
+                                             last_name='last_name',
+                                             first_name='first_name')
+
+    @tag('unit-test')
+    def test_add_homework_access_url(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get('/homeworkform/')
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_add_homework__access_name(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get(reverse('homework_form'))
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_add_homework_access_url_negative(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get(reverse('homework_form'))
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_add_homework_access_name_negative(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get(reverse('homework_form'))
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def testadd_homeworkUsedTemplate(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get(reverse('homework_form'))
+        #self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'homework_templates/homework_form.html')
+
+    @tag('unit-test')
+    def testadd_homework_NOT_UsedTemplate(self):
+        self.client.force_login(self.user)
+        Teacher.objects.create(user=self.user)
+        response = self.client.get(reverse('homework_form'))
+        self.assertTemplateNotUsed(response, 'home.html')
+
+    @tag('unit-test')
+    def testadd_homework(self):
+        self.client.force_login(self.user)
+        teacher=Teacher.objects.create(user=self.user)
+        data={'teacher':teacher,'homeWorkTitle':'homeWorkTitle','homeWorkContent':'homeWorkContent'}
+        response = self.client.post(reverse('homework_form'), data=data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+
+    @tag('integration-test')
+    def test_add_homework_WithLogin(self):
+        self.client.force_login(self.user)
+        teacher = Teacher.objects.create(user=self.user)
+        data = {'teacher': teacher, 'homeWorkTitle': 'homeWorkTitle', 'homeWorkContent': 'homeWorkContent'}
+        response = self.client.post(reverse('homework_form'), data=data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+        self.assertTemplateUsed(response, 'teacher_templates/teacher_dashboard.html')
+        self.assertRedirects(response, reverse('teacher'))
+
+
+#############################################################
+
+class BugReportTest_(TestCase):
+
+    @tag('unit-test')
+    def test_bugreport_access_url(self):
+
+        response = self.client.get('/bugreport',)
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_bugreport__access_name(self):
+        response = self.client.get(reverse('bugreport'))
+        self.assertEqual(response.status_code, 200)
+
+    @tag('unit-test')
+    def test_bugreport_access_url_negative(self):
+
+        response = self.client.get('/bugreport')
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def test_register_access_name_negative(self):
+        response = self.client.get(reverse('bugreport'))
+        self.assertNotEqual(response.status_code, 300)
+
+    @tag('unit-test')
+    def testRegisterUsedTemplate(self):
+        response = self.client.get(reverse('bugreport'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'bugReport_templates/bugReport_form.html')
+
+    @tag('unit-test')
+    def testRegister_NOT_UsedTemplate(self):
+        response = self.client.get(reverse('bugreport'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateNotUsed(response, 'home.html')
+
+    @tag('unit-test')
+    def test_view(self):
+        data = {'bugContent': 'content',}
+        response = self.client.post(reverse('bugreport'),data=data,follow=True)
+        self.assertEqual(response.status_code, 200)
+
+##########################################################
+
+
+
+
+
+
+
+
+
+
 
 
 
