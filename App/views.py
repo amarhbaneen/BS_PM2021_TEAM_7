@@ -56,7 +56,7 @@ def login(request):
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
 
-            if user is not None:
+            if user is not None and user.groups.filter(name='admins').exists():
                 auth.login(request, user)
                 return redirect('dashboard')
             elif user is not None and user.groups.filter(name='students').exists():
