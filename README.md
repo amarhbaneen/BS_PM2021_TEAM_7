@@ -24,6 +24,6 @@ Application includes 3 types of users (Admin,Student and Teacher).
 ## Project Run:
 
 ### Project Run (on Windows):
-1. Run runWin.bat (in Devops Scripts folder).
+1. Run runWin.bat (in  Scripts folder).
 
 
